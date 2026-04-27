@@ -1,0 +1,49 @@
+{
+  "title": "Time over noise: Asynchrony unlocks robust coordination beyond behavioural fluctuations — code and data archive",
+  "description": "<p>Reference implementation, simulation pipeline, analysis routines, figure-generation scripts, and processed simulation outputs supporting the paper:</p><p><strong>Sasai, K., Soga, Y. &amp; Gunji, Y.-P.</strong> <em>Time over noise: Asynchrony unlocks robust coordination beyond behavioural fluctuations.</em> Nature Communications (2026).</p><p>The repository implements two decentralised update regimes on the distributed graph-colouring problem: the Synchronous Noise Model (SNM, behavioural noise via state-selection ε) and the Asynchronous Random Model (ARM, partial asynchrony coupled with gridlock-triggered random reselection). Includes the avalanche / spectral diagnostics used in the manuscript and the processed <code>.pkl</code> outputs for every figure.</p><p><strong>Contents:</strong> source code (Python, NumPy / Numba / PyTorch GPU paths), experiment runners, figure scripts, supplementary diagnostics, and gzip-compressed pickle archives of all simulation outputs (~5 GB compressed).</p>",
+  "upload_type": "software",
+  "creators": [
+    {
+      "name": "Sasai, Kazuto",
+      "affiliation": "Faculty of Applied Science and Engineering, Ibaraki University, Japan"
+    },
+    {
+      "name": "Soga, Yuto",
+      "affiliation": "Graduate School of Science and Engineering, Ibaraki University, Japan"
+    },
+    {
+      "name": "Gunji, Yukio-Pegio",
+      "affiliation": "Department of Intermedia Art and Science, Waseda University, Japan"
+    }
+  ],
+  "keywords": [
+    "self-organised criticality",
+    "self-organized criticality",
+    "SOC",
+    "multi-agent systems",
+    "distributed coordination",
+    "graph colouring",
+    "graph coloring",
+    "asynchronous updating",
+    "partial asynchrony",
+    "1/f noise",
+    "neuronal avalanches",
+    "Beggs-Plenz",
+    "scale-free dynamics",
+    "complex systems",
+    "edge of chaos",
+    "robust criticality"
+  ],
+  "license": "MIT",
+  "access_right": "open",
+  "language": "eng",
+  "communities": [],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/kazsasai/time-over-noise",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ],
+  "notes": "If you use this software or data archive, please cite both the Zenodo record and the accompanying Nature Communications paper. Compressed pickle archives (.pkl.gz) reproduce the figures of the manuscript; uncompress with `gunzip` before use. See README.md and docs/reproduction.md for the figure-to-runner-to-data mapping."
+}

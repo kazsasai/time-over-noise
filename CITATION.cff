@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the accompanying paper."
+title: "Source code for: Time over noise — Asynchrony unlocks robust coordination beyond behavioural fluctuations"
+abstract: >-
+  Reference implementation of the Synchronous Noise Model (SNM) and the
+  Asynchronous Random Model (ARM) on the distributed graph-colouring problem,
+  together with the runners and figure-generation scripts that reproduce the
+  results of the accompanying paper.
+type: software
+authors:
+  - family-names: "Sasai"
+    given-names: "Kazuto"
+    email: kazutosasai@gmail.com
+  - family-names: "Soga"
+    given-names: "Yuto"
+  - family-names: "Gunji"
+    given-names: "Yukio-Pegio"
+license: MIT
+repository-code: "https://github.com/kazsasai/time-over-noise"
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.19812421
+    description: "Zenodo archive of the source code and processed simulation outputs"
+preferred-citation:
+  type: article
+  title: "Time over noise: Asynchrony unlocks robust coordination beyond behavioural fluctuations"
+  authors:
+    - family-names: "Sasai"
+      given-names: "Kazuto"
+    - family-names: "Soga"
+      given-names: "Yuto"
+    - family-names: "Gunji"
+      given-names: "Yukio-Pegio"
+  year: 2026
+  journal: "Nature Communications"
+  doi: "10.xxxx/xxxxx"

@@ -1,0 +1,46 @@
+# --- Simulation outputs (deposited on Zenodo) ---
+*.pkl
+*.npz
+*.h5
+
+# --- Generated figures ---
+*.pdf
+*.svg
+*.eps
+figures/output/
+docs/figures/*.png
+docs/figures/*.jpg
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env
+
+# Packaging / build
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# --- Notebooks ---
+.ipynb_checkpoints/
+
+# --- Logs ---
+*.log
+log_*.txt
