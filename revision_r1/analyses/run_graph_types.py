@@ -9,7 +9,9 @@ A. Holding and returns after the first solution: retention() of run_first_passag
 B. Avalanche populations: the per-trial histograms of avalanche_histograms.py (trial index = row order of each
    (model, p) group of the core data), split by the graph of each trial; s* is the pooled value of planC.json.
 C. Injected inconsistencies: the kicked runs of run_kick.py and run_kick_growth.py (identical task), re-simulated with
-   the seed kept so that each response can be assigned to its graph.
+   the seed kept so that each response can be assigned to its graph.  The cascade probability is pooled over injections
+   (cascades / injections); its 95% interval comes from bootstrap over graphs, each graph keeping all its injections,
+   because the up to 40 injections of a trial share one graph (also for all graphs together: Supplementary Fig. S7j).
 Every split is checked against the pooled value it must reproduce.
 
 Output: runs/graph_types/graph_types.json.  Run from revision_r1/analyses.
@@ -26,14 +28,15 @@ import run_kick_growth as rg
 OUT = 'runs/graph_types'
 PS = [round(p, 2) for p in np.arange(10) / 10 + 0.05]
 TYPE = {x['seed']: ('breakable' if x['structural'] else 'locked') for x in json.load(open('runs/departure/departure_0.45.json'))}
-Z = 1.959963984540054
-
-
-def wilson(k, n):
-    q = k / n
-    c = (q + Z * Z / (2 * n)) / (1 + Z * Z / n)
-    h = Z * np.sqrt(q * (1 - q) / n + Z * Z / (4 * n * n)) / (1 + Z * Z / n)
-    return [float(q), float(c - h), float(c + h)]
+def cascade_ci(per, rng, B=2000):
+    """Pooled share of cascades among the injections, with a 95% interval from bootstrap over graphs.
+    per: one array of response rows per graph (columns as run_kick.responses)."""
+    k = np.array([((r[:, 3] >= 15) | (r[:, 2] >= 100)).sum() if len(r) else 0 for r in per], float)
+    n = np.array([len(r) for r in per], float)
+    pick = rng.integers(0, k.size, (B, k.size))
+    bs = k[pick].sum(1) / n[pick].sum(1)
+    lo, hi = np.percentile(bs, [2.5, 97.5])
+    return [float(k.sum() / n.sum()), float(lo), float(hi)]
 
 
 def kicked(args):
@@ -75,10 +78,14 @@ def part_c(pool):
                 bs.append(rg.stats(np.concatenate([per[i] for i in pick if per[i].size]))[2])
             lo, hi = np.nanpercentile(np.array(bs), [2.5, 97.5], axis=0)
             comp = rr[rr[:, 0] == 1]
-            d[t] = dict(n_graphs=len(sel), n_kicks=int(len(rr)), completed=float(rr[:, 0].mean()), cascade=wilson(casc.sum(), len(rr)),
+            per_resp = [np.array(resp, float).reshape(-1, 4) for resp, _ in sel]
+            cascade = cascade_ci(per_resp, np.random.default_rng([2024, 78, int(round(p * 100)), t == 'locked']))
+            assert np.isclose(cascade[0], casc.mean())
+            d[t] = dict(n_graphs=len(sel), n_kicks=int(len(rr)), completed=float(rr[:, 0].mean()), cascade=cascade,
                         median_size=float(np.median(comp[:, 2])), taus=rg.TAUS.tolist(), Lambda=lam.tolist(),
                         Lambda_lo=lo.tolist(), Lambda_hi=hi.tolist())
-        d['all_cascade'] = wilson(((rows[:, 3] >= 15) | (rows[:, 2] >= 100)).sum(), len(rows))
+        d['all_cascade'] = cascade_ci([np.array(resp, float).reshape(-1, 4) for _, resp, _ in res], np.random.default_rng([2024, 78, int(round(p * 100)), 2]))
+        assert np.isclose(d['all_cascade'][0], ((rows[:, 3] >= 15) | (rows[:, 2] >= 100)).mean())
         out[f'{p:.2f}'] = d
         print('C', p, {t: (round(d[t]['cascade'][0], 3), round(d[t]['Lambda'][1], 3)) for t in ('breakable', 'locked')}, flush=True)
     return out

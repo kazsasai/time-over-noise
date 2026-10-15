@@ -1,7 +1,7 @@
 """Maximum-likelihood fits of each avalanche population separately (R1-3: analyse the solved and the unsolved phase
 separately rather than as one distribution).  Sweep clock, threshold 1.
 
-Populations: 'solved' (avalanches within the solved state) and 'unsolved' (avalanches that begin in an unsolved
+Populations: 'solved' (avalanches within the solved state) and 'unsolved' (avalanches that include an unsolved
 state: the resolve and open classes together).  Same five candidates, same x_min rule (KS-optimal power law with at
 least 500 avalanches in the tail, extended grid) and the same trial bootstrap (B = 200, x_min held fixed) as the
 pooled fits in run_aval_mle.py; no broken power law, because a single population needs no knee.

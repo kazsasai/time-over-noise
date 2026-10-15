@@ -234,7 +234,7 @@ def mle_population_table(Q):
     assert all(d['tbest'] == 'PL' for d in low) and all(d['tbest'] != 'PL' for d in uns if float(d['p']) > 0.45)
     Q['P_alpha_low'] = rng([d['alpha'] for d in low]); Q['P_xmin'] = f"{min(d['xmin'] for d in uns)}–{max(d['xmin'] for d in uns)}"
     Q['P_below'] = f"{100 * min(d['below_sstar'] for d in uns):.0f}–{100 * max(d['below_sstar'] for d in uns):.0f}%"
-    notes = ('Each population fitted separately (sweep clock): solved, avalanches within the solved state; unsolved, avalanches that begin in an unsolved state (classes resolve and open). '
+    notes = ('Each population fitted separately (sweep clock): solved, avalanches within the solved state; unsolved, avalanches that include an unsolved state (classes resolve and open). '
              'Columns as in Table~\\ref{tab:supp_mle_arm}; \\% same, share of 200 trial-bootstrap replicates in which the full-range best candidate stays best; '
              '$n$ (number of avalanches) and $\\Delta$AIC$_{\\rm PL}$ in thousands; cut-off, $1/\\lambda$ of the truncated power law fitted on the full range (colour changes), with its 95\\% bootstrap interval; \\% PL, share of replicates in which PL is best on the tail; $\\alpha_{\\rm PL}$ with its 95\\% bootstrap interval; \\% $< s^*$, share of tail avalanches below $s^*$. '
              '$^{b}$Fewer than two avalanches per trial in the tail: not interpreted. $^{c}$At the bound of the optimisation. '
@@ -243,7 +243,7 @@ def mle_population_table(Q):
               '\\cmidrule(lr){4-8}\\cmidrule(lr){9-14}',
               '$p$/$\\varepsilon$ & pop. & $n$ & best & \\% same & $\\Delta$AIC$_{\\rm PL}$ & KS & cut-off & $x_{\\min}$ & best & \\% PL & $\\alpha_{\\rm PL}$ & KS$_{\\rm PL}$ & \\% $< s^*$']
     cap = ('\\textbf{Maximum-likelihood comparison for each avalanche population separately (sweep clock).} '
-           'The same five candidates, $x_{\\min}$ rule and trial bootstrap as in Tables~\\ref{tab:supp_mle_arm} and~\\ref{tab:supp_mle_snm}, applied to the avalanches within the solved state and to those that begin in an unsolved state.')
+           'The same five candidates, $x_{\\min}$ rule and trial bootstrap as in Tables~\\ref{tab:supp_mle_arm} and~\\ref{tab:supp_mle_snm}, applied to the avalanches within the solved state and to those that include an unsolved state.')
     return table('tab:supp_mle_pop', cap, 'c c r c r r c c r c r c c r', header, rows, size='\\scriptsize', sep='1.0pt', notes=notes)
 
 
@@ -265,9 +265,9 @@ def graph_type_table(Q):
     Q['G_n'] = d['n_graphs']; Q['G_held'] = f'{100 * min(br):.1f}–{100 * max(br):.1f}%'
     notes = ('Breakable, graphs in which some proper 3-colouring has an edge whose two ends can change, in the same round, to the same colour (Methods~6 of the main text); '
              'locked, graphs without such an edge, in which a consistent colouring, once reached, is never lost. The type is a property of the graph and is the same at every $p$. '
-             'Held, never and returns as in Table~\\ref{tab:supp_reaching}. Solved, share of avalanches within the solved state; large, avalanches at or above the pooled $s^*$ that begin in an unsolved state, '
+             'Held, never and returns as in Table~\\ref{tab:supp_reaching}. Solved, share of avalanches within the solved state; large, avalanches at or above the pooled $s^*$ that include an unsolved state, '
              'with their number per trial, the share followed by a solution (resolve) and the mean excess $\\langle s - s^*\\rangle$; in locked graphs they come only from the period before the first solution. '
-             'Cascade, probability that an injection becomes a system-wide cascade (Wilson 95\\% interval); $\\Lambda$, growth rate of an injected inconsistency at $\\tau = 1$ sweep (bootstrap over graphs).')
+             'Cascade, probability that an injection becomes a system-wide cascade, pooled over injections (95\\% interval from bootstrap over graphs); $\\Lambda$, growth rate of an injected inconsistency at $\\tau = 1$ sweep (bootstrap over graphs).')
     header = [' & & \\multicolumn{3}{c}{Holding} & \\multicolumn{4}{c}{Avalanches} & \\multicolumn{2}{c}{Injection}',
               '\\cmidrule(lr){3-5}\\cmidrule(lr){6-9}\\cmidrule(lr){10-11}',
               '$p$ & graphs & held (\\%) & never (\\%) & returns & solved (\\%) & large/trial & resolve & excess & cascade [95\\% CI] & $\\Lambda$ [95\\% CI]']

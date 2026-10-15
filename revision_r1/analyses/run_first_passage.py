@@ -193,9 +193,12 @@ def main():
             ret, sol_runs, uns_runs = retention(g, rate)
             rows.append(dict(model=model, p=p, rate=rate, **fp, **ret))
             if (model, round(p, 2)) in (('SNM', 0.05), ('SNM', 0.06), ('ARM', 0.45), ('ARM', 0.47)):
+                order = np.argsort(g['seed'].to_numpy(), kind='stable')     # the same seed gives the same graph and start
                 surv[f'{name}_{model}_{p:.2f}'] = dict(T=np.sort(T[np.isfinite(T)]).tolist(), n=int(T.size), rate=rate,
                                                        sol_runs=np.sort(sol_runs).tolist(),
-                                                       uns_runs=np.sort(uns_runs).tolist())
+                                                       uns_runs=np.sort(uns_runs).tolist(),
+                                                       seed=g['seed'].to_numpy()[order].tolist(),
+                                                       T_by_seed=[float(x) if np.isfinite(x) else None for x in T[order]])
             print(name, model, f'{p:.2f}', f"solved {fp['solved']:.3f} median_r {fp['median_r'][0]} "
                   f"time_frac_solved {ret['time_frac_solved_pooled']:.3f} "
                   f"solved_run_sw {ret['mean_solved_run_sweeps']:.1f}", flush=True)

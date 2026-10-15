@@ -55,13 +55,8 @@ def main():
         ax.plot(pp,[r[key][2] for r in cr],sty,color=col,label=label)
     ax.set_yscale('log');ax.set_ylabel('Regression timescale (sweeps)');parameter(ax);ax.legend()
     ax=axs[3,0];panel(ax,'j')                      # moved from main Fig. 5f
-    z=1.959963984540054;rows=[]
-    for p in P:
-        with np.load(DATA/f'kick/kick_raw_ARM_{p:.2f}.npz') as d:
-            a=d['kicks']
-        k=((a[:,3]>=15)|(a[:,2]>=100)).sum();n=len(a);q=k/n
-        c=(q+z*z/(2*n))/(1+z*z/n);h=z*np.sqrt(q*(1-q)/n+z*z/(4*n*n))/(1+z*z/n)
-        rows.append((q,c-h,c+h))
+    inj=read('graph_types/graph_types.json')['injection']   # pooled over injections, 95% interval from bootstrap over graphs
+    rows=[inj[f'{p:.2f}']['all_cascade'] for p in P]
     ci_line(ax,P,[r[0] for r in rows],[[r[1],r[2]] for r in rows],ARM,label='ARM',fmt='o-')
     parameter(ax);ax.set_ylim(0,1);ax.yaxis.set_major_formatter(PercentFormatter(1,decimals=0))
     ax.set_ylabel('Fraction of injected responses')
