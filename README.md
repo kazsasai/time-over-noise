@@ -102,7 +102,11 @@ The simulation datasets and the analysis results are archived on Zenodo:
 - **v2.1**: code of the paper in its present form (Zenodo [10.5281/zenodo.23392863](https://doi.org/10.5281/zenodo.23392863)).
   Corrections after a final check: the name of a copyright holder in `LICENSE` (Yuto Soga); times to the first
   solution in Supplementary Fig. S11 counted from 1, as in Fig. 3; table notes and figure labels aligned with the text;
-  the Mann-Whitney test of Fig. 3 over all trials of the 50,000-round records.
+  the Mann-Whitney test of Fig. 3 over all trials of the 50,000-round records. Added: the paired comparison of the
+  times to the first solution (trials with the same seed share the graph and the initial colouring;
+  `run_first_passage.py`, `run_mannwhitney.py`); cascade probabilities of injected inconsistencies with 95% intervals
+  from bootstrap over graphs (Supplementary Fig. S7j and Table S11; `run_graph_types.py`); the avalanche classes of
+  Fig. 5a, b named by the state at the bin ends.
 - **v2.0**: the analyses, figures and tables in `revision_r1/`; core data regenerated with the seeded solver.
 - **v1.0**: code of the first version of the manuscript
   ([10.5281/zenodo.19812421](https://doi.org/10.5281/zenodo.19812421)).
