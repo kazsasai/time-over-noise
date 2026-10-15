@@ -73,7 +73,7 @@ def table(label, caption, colspec, header, rows, size='\\footnotesize', sep='4pt
     out.append('\\midrule')
     for r in rows:
         if not isinstance(r, str):
-            r = [re.sub(r'(?<![\w.$])-(?=\d)', '$-$', c) if '$' not in c else c for c in r]
+            r = [re.sub(r'(?<![\w.$-])-(?=\d)', '$-$', c) if '$' not in c else c for c in r]
         out.append(r if isinstance(r, str) else ' & '.join(r) + ' \\\\')
     out += ['\\bottomrule', '\\end{tabular}']
     if notes:
