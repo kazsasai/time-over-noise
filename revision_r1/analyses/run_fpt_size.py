@@ -3,9 +3,11 @@
 Data: result_for_plateau_k34.pkl (BA m = 2, N = 20, 30, ..., 100, k = 3, 4, eps / p = 0, 0.05, ..., 1, 200 trials,
 10,000 rounds).  No new simulation.  Unsolved trials are right-censored at the budget.  Because every censoring time
 equals the budget, the Kaplan-Meier estimate below the budget is the empirical distribution of the solved times over
-all trials, and a quantile q exists only where more than a fraction q of the trials are solved.  Medians carry 95%
+all trials, and a quantile q exists only where at least a fraction q of the trials are solved.  Medians carry 95%
 intervals from 1,000 bootstrap replicates over trials; replicates in which the median is not reached are kept as
 "above the budget", so an interval can be open at the top.  Sweeps: rounds for the SNM, rounds x (1 - p) for the ARM.
+Times are counted as in run_first_passage.py (Fig. 3): T = solve_time + 1 rounds, solve_time being the 0-based index of
+the first round with a proper colouring.
 
 Output: runs/fpt_size/fpt_size.json.  Run from revision_r1/analyses.
 """
@@ -42,7 +44,7 @@ def main():
     for (label, k, N, pe, pa), g in df.groupby(['label', 'color_num', 'node_num', 'p_noise', 'p_async']):
         model = 'ARM' if label == 'Async' else 'SNM'
         par = float(pa if model == 'ARM' else pe)
-        t, s = g.solve_time.to_numpy(), g.solved.to_numpy()
+        t, s = g.solve_time.to_numpy() + 1, g.solved.to_numpy()      # T = solve_time + 1, as in Fig. 3
         n = len(t)
         med = quantile(t, s, 0.5, budget)
         boot = np.array([quantile(t[i], s[i], 0.5, budget) for i in (rng.integers(0, n, n) for _ in range(B))])
@@ -58,7 +60,7 @@ def main():
             for N in sorted(df.node_num.unique()):
                 g = df[(df.label == ('Async' if model == 'ARM' else 'Noise')) & (df.color_num == k) & (df.node_num == N)
                        & np.isclose(df.p_async if model == 'ARM' else df.p_noise, par)]
-                curves[f'{model}_k{k}_N{N}'] = survival(g.solve_time.to_numpy(), g.solved.to_numpy(), budget)
+                curves[f'{model}_k{k}_N{N}'] = survival(g.solve_time.to_numpy() + 1, g.solved.to_numpy(), budget)
     os.makedirs(OUT, exist_ok=True)
     clean = lambda x: None if isinstance(x, float) and not np.isfinite(x) else x
     cells = [{key: ([clean(v) for v in val] if isinstance(val, list) else clean(val)) for key, val in c.items()} for c in cells]

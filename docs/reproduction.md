@@ -44,7 +44,7 @@ settings coincide.
 | Supplementary Fig. S11 | `figures_final_supp/plot_extra.py (fpt_size)` | `fpt_size/fpt_size.json` | `run_fpt_size.py` |
 | Supplementary Fig. S12 | `figures_final_supp/plot_extra.py (networks)` | `supp/colourability.json`<br>`supp/networks.json` | `run_colourability.py`<br>`run_supp_extra.py` |
 | Supplementary Table S1 | `tables/make_tables.py (passage_table)` | `fpt/factorial_2x2.json`<br>`fpt/first_passage.json`<br>`fpt/mannwhitney.json`<br>`robust/robustness.json` | `run_factorial_2x2.py`<br>`run_first_passage.py`<br>`run_mannwhitney.py`<br>`run_robustness.py` |
-| Supplementary Table S2 | `tables/make_tables.py (controls_table)` | `pilots/pilot_e1_snm_minconf.pkl`<br>`pilots/pilot_e2_sync_gated_q.pkl`<br>`pilots/pilot_factorial.pkl` | `pilot_E1_E4.py` |
+| Supplementary Table S2 | `tables/make_tables.py (controls_table)` | `fpt/first_passage.json`<br>`pilots/pilot_e1_snm_minconf.pkl`<br>`pilots/pilot_e2_sync_gated_q.pkl`<br>`pilots/pilot_factorial.pkl` | `pilot_E1_E4.py`<br>`run_first_passage.py` |
 | Supplementary Table S3 | `tables/make_tables.py (population_table)` | `aval/planC_*/planC.json`<br>`aval/planC_sweep/episodes.json`<br>`aval/planC_sweep/planC.json`<br>`aval/planC_sweep/sstar_rule_sensitivity.json` | `run_episodes.py`<br>`run_planC.py (all tags)`<br>`run_planC.py --tag sweep`<br>`run_sstar_rule_sweep.py` |
 | Supplementary Table S4 | `tables/make_tables.py (population_table)` | `aval/planC_*/planC.json`<br>`aval/planC_sweep/episodes.json`<br>`aval/planC_sweep/planC.json`<br>`aval/planC_sweep/sstar_rule_sensitivity.json` | `run_episodes.py`<br>`run_planC.py (all tags)`<br>`run_planC.py --tag sweep`<br>`run_sstar_rule_sweep.py` |
 | Supplementary Table S5 | `tables/make_tables.py (mle_tables)` | `aval/hist_ARM_*.npz`<br>`aval/mle_sweep/boot.json`<br>`aval/mle_sweep/point.json`<br>`aval/planC_sweep/planC.json` | `avalanche_histograms.py`<br>`run_aval_mle.py`<br>`run_aval_mle_boot.py`<br>`run_planC.py --tag sweep` |
@@ -54,6 +54,11 @@ settings coincide.
 | Supplementary Table S9 | `tables/make_tables.py (departure_table)` | `departure/departure_summary.json` | `run_departure_mechanism.py` |
 | Supplementary Table S10 | `tables/make_tables.py (mle_population_table)` | `aval/hist_*_*.npz`<br>`aval/mle_pop/boot.json`<br>`aval/mle_pop/point.json`<br>`aval/planC_sweep/planC.json` | `avalanche_histograms.py`<br>`run_aval_mle_pop.py`<br>`run_planC.py --tag sweep` |
 | Supplementary Table S11 | `tables/make_tables.py (graph_type_table)` | `graph_types/graph_types.json` | `run_graph_types.py` |
+
+Supplementary Table S7 and Supplementary Fig. S5c, f, i-k start at the knee of the CCDF. The knee positions and the
+least-squares exponents come from the knee procedure of Methods 7, run on the regenerated core data with the
+first-submission script `figures/fig_supp_knee_sensitivity.py` (CCDF restricted to log10 P >= -4); they are entered as
+constants in `analyses/hump_same_region.py`.
 
 `aval/hist_*_*.npz` are the per-trial avalanche-size histograms of the long records; `figure_common.pooled()` reads
 them for Supplementary Figs S2 and S4-S6. Supplementary Figs S1-S2, S4-S9 are written by `figures_final_supp` as

@@ -1,5 +1,5 @@
 """
-Step-budget extension quoted in the Discussion (SNM at N = 125, k = 16; ARM at N = 400, k = 28, 29), with the scalability design
+Step-budget extension quoted in the Results (SNM at N = 125, k = 16; ARM at N = 400, k = 28, 29), with the scalability design
 (master_seed 2024, 200 trials, BA m=2, SNM eps=0.05, ARM p=0.45) and step_max = 50,000 (10x the
 5,000-step heatmap budget). Solution rates at 5,000 / 10,000 / 50,000 steps are read off the
 first-passage time. Run from revision_r1/analyses/runs/extension with the repository root on PYTHONPATH

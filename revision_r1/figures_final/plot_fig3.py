@@ -41,12 +41,15 @@ def main():
         ax.set_xscale('log'); ax.set_xlim(.8,1150); log_ticks(ax,[1,10,100,1000])
         fraction(ax); ax.set_ylabel('Fraction not yet solved'); ax.set_xlabel(f'Time to first solution ({unit})')
         ax.axhline(.5, color=GREY,linewidth=.6,ls=':')
-        t=tests[f'fine_SNM_0.05|fine_ARM_0.45|{unit}']
+        # medians and test over all trials of the 50,000-round records (every trial solved); the medians equal those of
+        # the solved trials of the 1,000-round scans drawn here
+        t=tests[f'long_SNM_0.05|long_ARM_0.45|{unit}']; tf=tests[f'fine_SNM_0.05|fine_ARM_0.45|{unit}']
+        assert (t['med_x'], t['med_y']) == (tf['med_x'], tf['med_y']) and t['nx'] == t['ny'] == 1000
         if unit=='sweeps':
-            txt=f"Solved-trial medians\n{t['med_x']:.1f} vs {t['med_y']:.1f}\nMann-Whitney p = {t['p']:.3f}"
+            txt=f"Medians {t['med_x']:.1f} vs {t['med_y']:.1f}\nMann-Whitney p = {t['p']:.3f}"
         else:
-            txt=f"Solved-trial medians\n{t['med_x']:.0f} vs {t['med_y']:.0f} rounds"
-        note(ax,txt,xy=(.04,.08)); ax.legend(loc='upper right',handlelength=1.3)
+            txt=f"Medians {t['med_x']:.0f} vs {t['med_y']:.0f} rounds"
+        note(ax,txt,xy=(.04,.04)); ax.legend(loc='upper right',handlelength=1.3)   # test over all trials of the 50,000-round records (legend)
 
     ax = fig.add_subplot(gs[1,4:6]); panel(ax,'e')
     order=['Sync+Stay (SNM, eps=0)','Async+Stay','Sync+Random','Async+Random (ARM)']

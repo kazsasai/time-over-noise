@@ -7,7 +7,7 @@ Numbers quoted in the supplementary text are recomputed here and, when the manus
 Usage (from revision_r1/tables):  python3 make_tables.py
 """
 from pathlib import Path
-import json
+import json, re
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent
@@ -72,6 +72,8 @@ def table(label, caption, colspec, header, rows, size='\\footnotesize', sep='4pt
     out += [h + ' \\\\' for h in header]
     out.append('\\midrule')
     for r in rows:
+        if not isinstance(r, str):
+            r = [re.sub(r'(?<![\w.$])-(?=\d)', '$-$', c) if '$' not in c else c for c in r]
         out.append(r if isinstance(r, str) else ' & '.join(r) + ' \\\\')
     out += ['\\bottomrule', '\\end{tabular}']
     if notes:
@@ -112,6 +114,9 @@ def mle_tables(Q):
     boot = read('aval/mle_sweep/boot.json')
     plan = {r['p']: r for r in read('aval/planC_sweep/planC.json')['summary'] if r['model'] == 'ARM'}
     out = {}
+    hi_eps = [r['n_total'] / r.get('n_trials', 1000) for r in point if r['model'] == 'SNM' and float(r['p']) >= 0.45]
+    snm_per_trial = f'{min(hi_eps):.1f}--{max(hi_eps):.1f}'
+    Q['S2_snm_per_trial'] = snm_per_trial.replace('--', '–')
     for model in ('ARM', 'SNM'):
         rows, alphas, ks, xmins, above, flick = [], [], [], [], [], []
         for r in sorted([r for r in point if r['model'] == model], key=lambda r: float(r['p'])):
@@ -149,7 +154,7 @@ def mle_tables(Q):
             notes = ('$n$, number of avalanches pooled over 1{,}000 trials of 50{,}000 rounds. The full range starts at the smallest observed size ($s = 2$ for every ARM condition). Best, the candidate with the lowest AIC '
                      '(PL, power law; TPL, truncated power law; LN, log-normal; SE, stretched exponential; EXP, exponential). '
                      '$\\Delta$AIC$_{\\rm PL}$ and $\\Delta$AIC$_{\\rm TPL}$, AIC of PL and TPL minus that of the best candidate. '
-                     '$x_{\\min}$ minimises the KS distance of PL over 40 log-spaced candidates from the smallest size to 5{,}000, continued above 5{,}000 at about 11.5 candidates per decade up to the largest size that leaves 500 avalanches in the tail (the same rule for both models). \\% $\\ge s^*$, share of tail avalanches at or above $s^*$ (the size above which avalanches within the solved state make up less than 1\\%); '
+                     '$x_{\\min}$ minimises the KS distance of PL over 40 log-spaced candidates (38 distinct integers) from the smallest size to 5{,}000, continued above 5{,}000 at about 11.5 candidates per decade up to the largest size that leaves 500 avalanches in the tail (the same rule for both models). \\% $\\ge s^*$, share of tail avalanches at or above $s^*$ (the smallest size at which avalanches within the solved state make up less than 1\\% of the avalanches at least that large); '
                      '\\% solved, share of tail avalanches that stay within the solved state. '
                      '\\% PL best, share of 200 trial-bootstrap replicates (trials resampled with replacement, $x_{\\min}$ fixed) in which PL has the lowest AIC on the tail. '
                      'Intervals are bootstrap percentiles. $^{a}$At $p=0.45$, LN is best on the tail.')
@@ -160,7 +165,7 @@ def mle_tables(Q):
                       f'{par} & $n$ & best & $\\Delta$AIC$_{{\\rm PL}}$ & KS & $x_{{\\min}}$ & $n_{{\\rm tail}}$ & best & $\\Delta$AIC$_{{\\rm TPL}}$ & \\% PL best & $\\alpha_{{\\rm PL}}$ [95\\% CI] & KS$_{{\\rm PL}}$']
             rows = [r[:7] + [r[7].replace('$^{a}$', '')] + r[8:] for r in rows]
             notes = ('Columns as in Table~\\ref{tab:supp_mle_arm}. $^{b}$Fewer than two avalanches per trial in the tail: the KS criterion selects the far end of the distribution, '
-                     'and these tail fits are not interpreted. $^{c}$At the bound of the optimisation. For $\\varepsilon \\ge 0.45$ there are only 1.1--1.7 avalanches per trial, and their size grows '
+                     'and these tail fits are not interpreted. $^{c}$At the bound of the optimisation. For $\\varepsilon \\ge 0.45$ there are only ' + snm_per_trial + ' avalanches per trial, and their size grows '
                      'almost in proportion to the record length (Supplementary Fig.~S4\\,l); these rows are listed for completeness and are not compared with the ARM.')
         cap = (f'\\textbf{{Maximum-likelihood comparison of avalanche-size distributions, {model} (sweep clock).}} '
                'Identical procedure for both models: discrete maximum likelihood on the full size range and on the tail '
@@ -215,7 +220,7 @@ def mle_population_table(Q):
         for d in sorted(sel, key=lambda d: (float(d['p']), d['pop'] != 'solved')):
             edge = d.get('n_tail', 1e9) < 2 * d['n_trials']
             rows.append([d['p'], 'solved' if d['pop'] == 'solved' else 'unsolved', (num(d['n'] / 1000, 1) if d['n'] < 10000 else big(d['n'] / 1000)), d['best'], pct(d['same'], 0),
-                         (num(d['d_pl'] / 1000, 1) if d['d_pl'] < 10000 else big(d['d_pl'] / 1000)), num(d['ks'], 3), ci(d['cut'], *d['cut_ci'], f=num, d=0),
+                         (num(d['d_pl'] / 1000, 1) if d['d_pl'] < 10000 else big(d['d_pl'] / 1000)), num(d['ks'], 3), ci(d['cut'], *d['cut_ci'], f=big),
                          big(d.get('xmin')) + ('$^{b}$' if edge else ''), d.get('tbest', DASH), pct(d.get('pl_best'), 0),
                          ci(d.get('alpha'), *(d.get('alpha_ci') or [None, None])) + ('$^{c}$' if d.get('at_bound') else ''),
                          num(d.get('ks_pl'), 3), pct(d.get('below_sstar'), 0) if 'below_sstar' in d else DASH])
@@ -239,7 +244,7 @@ def mle_population_table(Q):
               '$p$/$\\varepsilon$ & pop. & $n$ & best & \\% same & $\\Delta$AIC$_{\\rm PL}$ & KS & cut-off & $x_{\\min}$ & best & \\% PL & $\\alpha_{\\rm PL}$ & KS$_{\\rm PL}$ & \\% $< s^*$']
     cap = ('\\textbf{Maximum-likelihood comparison for each avalanche population separately (sweep clock).} '
            'The same five candidates, $x_{\\min}$ rule and trial bootstrap as in Tables~\\ref{tab:supp_mle_arm} and~\\ref{tab:supp_mle_snm}, applied to the avalanches within the solved state and to those that begin in an unsolved state.')
-    return table('tab:supp_mle_pop', cap, 'c c r c r r c c r c r c c r', header, rows, size='\\scriptsize', sep='1.3pt', notes=notes)
+    return table('tab:supp_mle_pop', cap, 'c c r c r r c c r c r c c r', header, rows, size='\\scriptsize', sep='1.0pt', notes=notes)
 
 
 # ---------- S11: ARM results by graph type (breakable / locked) ----------
@@ -286,8 +291,8 @@ def knee_table(Q):
     Q['S3_alpha'] = rng(alphas); Q['S3_ks'] = rng(ksv, 3)
     Q['S3_cut_lo'] = big(h['0.05']['TPL_cutoff']); Q['S3_cut_hi'] = big(h['0.65']['TPL_cutoff'])
     cap = ('\\textbf{Maximum likelihood on the range above the CCDF knee (step clock).} '
-           'The range is all avalanches above the knee located by a least-squares fit of the complementary cumulative distribution (CCDF; main Methods, section~7); '
-           'the same data and the same range are used for both estimates.')
+           'The range starts at the knee located by a least-squares fit of the complementary cumulative distribution (CCDF; main Methods, section~7): '
+           'the least-squares fit uses the CCDF above the knee size, and the maximum-likelihood fits use the avalanches of the knee size and larger, from the same data.')
     notes = (f'Lower end, the knee; decades, $\\log_{{10}}(s_{{\\max}}/s_{{\\rm knee}})$; $\\tau$, exponent of the least-squares CCDF fit; '
              '$\\alpha$ and cut-off, maximum-likelihood TPL parameters with 95\\% trial-bootstrap intervals; '
              '$\\Delta$AIC$_{\\rm PL}$, AIC of PL minus that of the best candidate. '
@@ -314,9 +319,9 @@ def population_table(Q):
     Q['S4_quiet_max'] = max(max(ep[p]['nontrivial_quiet']) for p in ep)
     cap_a = ('\\textbf{Two populations of avalanches (ARM, sweep clock, primary definition).} '
              'Avalanches are runs of sweeps with more than one colour change per sweep.')
-    notes_a = ('$s^*$, the size above which avalanches within the solved state make up less than 1\\%. '
+    notes_a = ('$s^*$, the smallest size at which avalanches within the solved state make up less than 1\\% of the avalanches at least that large. '
                'Solved / resolve / open, shares of all avalanches that stay within the solved state, are followed by a solution, or leave the system unsolved. '
-               '$n_{\\rm ep}$, number of non-trivial unsolved episodes (size $\\ge s^*$); via large, share of them resolved through a large avalanche. '
+               '$n_{\\rm ep}$, number of non-trivial unsolved episodes (size $\\ge s^*$) after the first solution; via large, share of them resolved through a large avalanche. '
                'Resolve share, share of large avalanches ($s \\ge s^*$, solved class excluded) that are followed by a solution. '
                'Mean excess, mean of $s - s^*$ over the same avalanches (colour changes). No non-trivial episode resolved without an avalanche. '
                'Intervals are 95\\% trial-bootstrap intervals.')
@@ -348,7 +353,7 @@ def population_table(Q):
     notes_b = ('Resolve share and mean excess as in Table~\\ref{tab:supp_populations}; intervals for the threshold, record and clock variants are shown in Supplementary Fig.~S6. '
                'Rule defining $s^*$: the solved-class share above $s^*$ is required to be below 0.5\\% or 2\\% instead of 1\\%. '
                '--- marks an undefined value (no large avalanche or $s^*$ undefined) or a zero mean excess. '
-               'In the step clock a step contains on average only $20(1-p)$ activations, so a fixed per-step threshold becomes stricter as $p$ grows; '
+               'In the step clock a bin of one round contains on average only $20(1-p)$ activations, so a fixed threshold per bin becomes stricter as $p$ grows; '
                'bins of two sweeps merge the two populations. Both are reported as limiting cases, not as alternative definitions.')
     header_b = [' & \\multicolumn{5}{c}{Resolve share of large avalanches} & \\multicolumn{5}{c}{Mean excess size}',
                 '\\cmidrule(lr){2-6}\\cmidrule(lr){7-11}',
@@ -385,12 +390,12 @@ def spectra_table(Q):
     Q['S5_agent_a'] = rng([ag[f'ARM_{p}']['a_step']['alpha_of_mean_spectrum'] for p in low])
     Q['S5_agent_b'] = rng([ag[f'ARM_{p}']['b_step']['alpha_of_mean_spectrum'] for p in low])
     Q['S5_snm005'] = num(ag['SNM_0.05']['a_step']['alpha_of_mean_spectrum'])
-    cap = '\\textbf{Spectral exponents of the conflict ratio and per-agent colour spectra.}'
-    notes = ('Full record: amplitude exponent $\\beta$ of the trial-averaged $\\log_{10}|\\hat C(f)|$, fitted on $10^{-3.5}$--$10^{-1}$ cycles per step, '
+    cap = '\\textbf{Spectral exponents of the fraction of conflicting nodes and per-agent colour spectra.}'
+    notes = ('Full record: amplitude exponent $\\beta$ of the trial-averaged $\\log_{10}|\\hat C(f)|$, fitted on $10^{-3.5}$--$10^{-1}$ cycles per round, '
              'for all trials, for trials that never leave the consistent state after their first solution (\\emph{never}), and for the others (\\emph{exc.}); '
              '\\% never, share of the never-leaving trials. Stationary: last $2^{15}$ rounds, fitted on $10^{-3}$--$10^{-1}$ cycles per sweep; '
              '\\emph{ensemble} is the exponent of the mean power, \\emph{trial} the median per-trial exponent [interquartile range], '
-             '\\emph{top 5\\%} the share of power held by the 5\\% of nonconstant trials with the highest variance (computed at five $p$). '
+             '\\emph{top 5\\%} the share of power held by the 5\\% of nonconstant trials with the highest variance (\\emph{trial} and \\emph{top 5\\%} computed at five $p$). '
              'Indicator: solved/unsolved indicator, observed and renewal surrogate (excursions and consistent spells reshuffled). '
              'Per agent: slope $\\alpha$ of the site-summed colour spectrum in 1{,}024 rounds, from a random start (protocol of Uragami and Gunji) and after the first solution; 100 trials per condition. '
              '$\\beta$ is an amplitude exponent; the power exponent is $2\\beta$.')
@@ -422,7 +427,7 @@ def passage_table(Q):
                     rand_s.append(q['rand_per_sweep_search'])
         if model == 'SNM':
             rows.append('\\midrule')
-    m = mw['fine_SNM_0.05|fine_ARM_0.45|sweeps']
+    m = mw['long_SNM_0.05|long_ARM_0.45|sweeps']          # all trials are solved in the 50,000-round records
     Q['S6_med'] = f"{m['med_x']:.1f} and {m['med_y']:.1f} sweeps"; Q['S6_mw'] = f"p = {m['p']:.3f}"
     Q['S6_held'] = f'{100 * min(held):.0f}–{100 * max(held):.1f}%'
     Q['S6_never'] = f'{100 * min(never):.0f}–{100 * max(never):.0f}%'
@@ -437,7 +442,7 @@ def passage_table(Q):
              'Returns, returns to a consistent colouring per 1{,}000 sweeps after the first solution, pooled over trials (sweep clock). '
              'Random reselections per sweep before and after the first solution (1{,}000-round records): $\\varepsilon N$ for the SNM, the number of active gridlocked agents for the ARM. '
              f"At the representative values the median times are {m['med_x']:.1f} (SNM, $\\varepsilon=0.05$) and {m['med_y']:.1f} sweeps (ARM, $p=0.45$); "
-             f"Mann--Whitney $p = {m['p']:.3f}$.")
+             f"Mann--Whitney $p = {m['p']:.3f}$ over all trials.")
     header = [' & \\multicolumn{2}{c}{Reached (\\%)} & \\multicolumn{2}{c}{Median first solution} & \\multicolumn{4}{c}{Holding} & \\multicolumn{2}{c}{Reselections / sweep}',
               '\\cmidrule(lr){2-3}\\cmidrule(lr){4-5}\\cmidrule(lr){6-9}\\cmidrule(lr){10-11}',
               'Model & 1{,}000 r & 50{,}000 r & sweeps [95\\% CI] & rounds & held (\\%) & if left (\\%) & never (\\%) & returns & before & after']
@@ -468,6 +473,8 @@ def controls_table(Q):
                          pct(held) if np.isfinite(held) else DASH, num(brk, 1) if np.isfinite(brk) else DASH])
         rows.append('\\midrule' if tm != 'sequential' else '')
     rows = [r for r in rows if r != '']
+    arm_long = [r for r in read('fpt/first_passage.json')['rows']['long'] if r['model'] == 'ARM' and abs(r['p'] - 0.45) < 1e-9][0]
+    arm_rounds_sweeps = f"{arm_long['median_s'][0]:.1f}"
     e2 = pd.read_pickle(RUNS / 'pilots/pilot_e2_sync_gated_q.pkl').groupby('q')['solved'].agg(['sum', 'count'])
     e1 = pd.read_pickle(RUNS / 'pilots/pilot_e1_snm_minconf.pkl').groupby('p_noise')['solved'].agg(['sum', 'count'])
     qs = [0.0, 0.01, 0.02, 0.05, 0.1, 0.2, 0.3, 0.5, 0.7, 1.0]
@@ -475,9 +482,10 @@ def controls_table(Q):
     line_q = ' & '.join(pct(e2.loc[q, 'sum'] / e2.loc[q, 'count']) for q in qs)
     line_e = ' & '.join(pct(e1.loc[e, 'sum'] / e1.loc[e, 'count']) for e in es)
     Q['T2_minconf'] = (pct(e1['sum'].max() / 1000), f"{e1.index[np.argmax(e1['sum'].to_numpy())]:.2f}")
-    cap = ('\\textbf{Control models for the timing and the gridlock rule} ($N=20$, $k=3$, $\\varepsilon=0$, 1{,}000 graphs with the seeds of the main data).')
+    cap = ('\\textbf{Control models for the timing and the gridlock rule} ($N=20$, $k=3$, $\\varepsilon=0$ unless stated, 1{,}000 graphs with the seeds of the main data).')
     notes = ('Reached: share of trials with a proper colouring within 1{,}000 rounds (common clock, individual time) or 1{,}000 sweeps (random sequential), with Wilson 95\\% intervals. '
-             'Median sweeps to the first solution, held share of time after it, and mean number of departures from the consistent state after it, over solved trials. '
+             'Median sweeps to the first solution, held share of time after it, and mean number of departures from the consistent state after it, over solved trials; '
+             'here a sweep is counted as the realised number of activations divided by $N$, which works for all three timings, whereas Table~\\ref{tab:supp_reaching} and the main text count rounds $\\times (1-p)$ (' + arm_rounds_sweeps + ' sweeps for the same ARM condition). '
              'Min-conflicts: a gridlocked agent moves to a colour with the fewest conflicts (random tie-break). Random sequential updating lets exactly one agent act per step and therefore presupposes a global ordering.')
     header = ['Timing & Gridlock rule & Reached (\\%) [95\\% CI] & Median sweeps & Held (\\%) & Departures']
     t1 = table('tab:supp_controls', cap, 'l l c r c r', header, rows, size='\\footnotesize', sep='3pt', notes=notes)
@@ -488,7 +496,8 @@ def controls_table(Q):
                 '\\par\\smallskip\\parbox{\\linewidth}{\\footnotesize ' + note + '}\n')
     b2 = block('Gated reselection on a common clock (1{,}000 rounds).', '$q$', [f'{q:g}' for q in qs], line_q,
                'All agents act at every round; each gridlocked agent redraws uniformly with probability $q$ and otherwise stays. '
-               '$q = 0$ is the synchronous stay rule and $q = 1$ synchronous random reselection.')
+               '$q = 1$ is synchronous random reselection. $q = 0$ follows the synchronous stay rule but draws one random number per gridlocked agent, '
+               'so its trajectories differ from those of the stay rule above (' + pct(e2.loc[0.0, 'sum'] / e2.loc[0.0, 'count']) + '\\% here).')
     b3 = block('SNM with the min-conflicts gridlock rule (1{,}000 rounds).', '$\\varepsilon$', [f'{e:g}' for e in es], line_e,
                'A gridlocked agent moves to a colour with the fewest conflicts instead of staying; behavioural noise $\\varepsilon$ as in the SNM. '
                'The full scan covers $\\varepsilon = 0$--$0.98$ in steps of 0.02.')
@@ -603,7 +612,7 @@ def check_captions(Q):
         f"α = {Q['S3_alpha']} for p ≤ 0.45, but with KS distances {Q['S3_ks']}",
         f"make up {Q['S4_solved_range']} of all ARM avalanches",
         f"β = {Q['S5_beta_mean']}", f"make up {Q['S5_never']} of all trials", f"hold {Q['S5_top5']} of the power",
-        f"α = {Q['S5_agent_a']} for p ≤ 0.65", f"α = {Q['S5_agent_b']} in windows", f"(α = {Q['S5_snm005']})",
+        f"α = {Q['S5_agent_a']} for p ≤ 0.65", f"α = {Q['S5_agent_b']} in windows", f"(α = {Q['S5_snm005']}; panel e)", f"From ε = 0.45 there are only {Q['S2_snm_per_trial']} avalanches per trial",
         f"widens from {sc['SNM_fine_r200']['width']:.2f} at 200 rounds to {sc['SNM_fine_r500']['width']:.2f} at 500 and {sc['SNM_fine_r1000']['width']:.2f} at 1,000 rounds",
         f"is {sc['ARM_fine_r500']['width']:.2f} wide at 500 rounds and {sc['ARM_fine_r1000']['width']:.2f} at 1,000 rounds",
         f"from {100 * hv[0.0]:.1f}% at ε = 0 to {100 * hv[0.15]:.1f}% at ε = 0.15 and {100 * hv[0.25]:.1f}% at ε = 0.25",

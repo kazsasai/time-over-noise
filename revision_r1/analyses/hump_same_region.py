@@ -1,6 +1,10 @@
 """
-MLE on exactly the paper's large-scale region: same data and avalanche definition as fig4 (step clock, theta=1),
-all avalanches with size above the knee x_k of the CCDF fit (Methods; Supplementary Table S7), p = 0.05-0.65.
+Maximum likelihood on the range above the CCDF knee (Methods 7; Supplementary Table S7, Fig. S5): the same data and
+avalanche definition as the least-squares analysis (step clock, threshold 1), avalanches of the knee size and larger
+(the least-squares fit uses the CCDF above the knee), p = 0.05-0.65.
+XK (log10 of the knee size, rounded to three decimals) and TAU_OLS (least-squares exponent) are the output of the knee
+procedure of Methods 7 on the regenerated core data: figures/fig_supp_knee_sensitivity.py of the repository with the
+CCDF restricted to log10 P >= -4 (the row lP_cutoff = -4 of its output sensitivity_knee.csv).
 (1) per-p MLE of PL / TPL / LN / SE / EXP; TPL alpha (pdf exponent) and cutoff 1/lambda with trial bootstrap;
 (2) is the shape common?  joint TPL fit with one alpha for all p and a separate lambda per p, vs separate alphas.
 Output: runs/aval/hump_same_region.json.  Run from revision_r1/analyses.

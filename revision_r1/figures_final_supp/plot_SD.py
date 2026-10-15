@@ -11,7 +11,7 @@ def main():
     for key,label,col,sty in [('all','All trials',ARM,'-'),('never_leave','Never leave after solution',GREY,'--'),('other','Trials with excursions',PURPLE,'-')]:
         spectrum(ax,f,z[condition+'full_geomean_amp_'+key],color=col,ls=sty,label=label)
     ax.axvspan(10**-3.5,.1,color=GREY,alpha=.08)
-    ax.set(xlabel='Frequency (cycles per step)',ylabel='Geometric mean amplitude',xlim=(1e-4,.5))
+    ax.set(xlabel='Frequency (cycles per round)',ylabel='Geometric mean amplitude',xlim=(1e-4,.5))
     ax.legend(fontsize=6.5)
     ax=axs[0,1]; panel(ax,'b')
     for key,label,col,sty in [('fig4_full','All trials',ARM,'o-'),('fig4_full_never_leave','Never leave',GREY,'s--'),('fig4_full_other','With excursions',PURPLE,'^-')]:
@@ -32,7 +32,7 @@ def main():
                               ('win_mean_power_renewal_surrogate','Renewal surrogate',INK,'--'),
                               ('win_mean_power_without_top10pct_trials','Below 90th variance percentile',PURPLE,':')]:
         spectrum(ax,f,z[condition+key],color=col,ls=sty,label=label)
-    ax.set(xlabel='Frequency (cycles per sweep)',ylabel='Mean conflict-ratio power',xlim=(1e-4,.8))
+    ax.set(xlabel='Frequency (cycles per sweep)',ylabel='Mean power',xlim=(1e-4,.8))
     ax.legend(fontsize=6.4)
     ax=axs[1,1];panel(ax,'e')
     ax.plot(pp,[r['beta_meanpower'] for r in ss],'o-',color=ARM,label='Exponent of mean power')
@@ -43,7 +43,7 @@ def main():
     ax.plot(pp,[r['power_share_top5pct_trials'] for r in ss],'o-',color=ARM)
     ax.axhline(.5,color=GREY,ls='--',lw=.8)
     ax.set_ylim(.4,.62);ax.set_yticks([.4,.45,.5,.55,.6]);ax.yaxis.set_major_formatter(PercentFormatter(1,decimals=0))
-    ax.set_ylabel('Power share of top 5% of active trials');parameter(ax)
+    ax.set_ylabel('Power share of top 5% of nonconstant trials');parameter(ax)
     ax=axs[2,0];panel(ax,'g')
     for key,label,col,sty in [('beta_meanpower','All nonconstant trials',ARM,'o-'),
                              ('beta_meanpower_below_q95','Below 95th percentile','#7A4E00','s--'),

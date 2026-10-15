@@ -1,4 +1,4 @@
-"""Exact 3-colourability of the graphs used in the network-ensemble comparison (Supplementary Fig. S11).
+"""Exact 3-colourability of the graphs used in the network-ensemble comparison (Supplementary Fig. S12).
 Graphs are built exactly as gcg_solver does (BA m=2; ER q=2m/(N-1), regenerated until connected; WS k=4, beta=0.3)
 with the 1,000 core seeds.  Output: runs/supp/colourability.json.  Run from revision_r1/analyses."""
 import json

@@ -7,7 +7,7 @@ abstract: >-
   the simulation datasets, and the analyses that produce every figure and
   supplementary table of the accompanying paper.
 type: software
-version: "2.0"
+version: "2.1"
 date-released: "2026-10-15"
 authors:
   - family-names: "Sasai"
