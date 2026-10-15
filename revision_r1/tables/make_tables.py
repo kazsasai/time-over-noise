@@ -486,7 +486,7 @@ def controls_table(Q):
     notes = ('Reached: share of trials with a proper colouring within 1{,}000 rounds (common clock, individual time) or 1{,}000 sweeps (random sequential), with Wilson 95\\% intervals. '
              'Median sweeps to the first solution, held share of time after it, and mean number of departures from the consistent state after it, over solved trials; '
              'here a sweep is counted as the realised number of activations divided by $N$, which works for all three timings, whereas Table~\\ref{tab:supp_reaching} and the main text count rounds $\\times (1-p)$ (' + arm_rounds_sweeps + ' sweeps for the same ARM condition). '
-             'Min-conflicts: a gridlocked agent moves to a colour with the fewest conflicts (random tie-break). Random sequential updating lets exactly one agent act per step and therefore presupposes a global ordering.')
+             'Min-conflicts: a gridlocked agent moves to a colour with the fewest conflicts (random tie-break). Random sequential updating lets exactly one agent act per step, so each update is completed before the next decision and inconsistencies from overlapping decisions are excluded by construction.')
     header = ['Timing & Gridlock rule & Reached (\\%) [95\\% CI] & Median sweeps & Held (\\%) & Departures']
     t1 = table('tab:supp_controls', cap, 'l l c r c r', header, rows, size='\\footnotesize', sep='3pt', notes=notes)
     def block(title, first, labels, values, note):
