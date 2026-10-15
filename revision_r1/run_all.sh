@@ -44,13 +44,14 @@ analyses() {
   python3 run_agent_spectra.py
   python3 export_supp_data.py
   python3 run_branching.py
+  python3 run_branching_by_class.py
   # Injected inconsistencies, leaving the consistent state, graph types
   python3 run_kick.py
   python3 run_kick_growth.py
   python3 run_kick_vs_natural.py
   python3 run_departure_mechanism.py --ps 0.05,0.45,0.85
-  python3 save_trial_types.py
   python3 run_graph_types.py
+  python3 save_trial_types.py
   # Network size, network ensembles, mixing (parameter scans of Fig. 6 and new simulations)
   python3 fig6_numbers.py
   python3 run_fpt_size.py

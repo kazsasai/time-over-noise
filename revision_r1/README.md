@@ -23,8 +23,12 @@ revision_r1/
 | `../result_for_plateau_k34.pkl` | Fig. 6a-d: N = 20-100, k = 3, 4, 200 trials of 10,000 rounds | `../experiments/run_plateau_k34.py` or Zenodo |
 | `../result_for_scalability.pkl` | Fig. 6e, f: N = 20-500, k = 2-50, 200 trials of 5,000 rounds | `../experiments/run_scalability.py` or Zenodo |
 
-The core data are bit-reproducible: `data/run_rev1_core.sh` regenerates them from the seeds in the runners
-(about 36 minutes and up to 12 GB of memory on an Apple M4 Pro with 14 workers). See `data/README.md`.
+`data/run_rev1_core.sh` regenerates the core data from the seeds in the runners (about 36 minutes and up to 12 GB
+of memory on an Apple M4 Pro with 14 workers). On that platform, with the versions in `../requirements-lock.txt`,
+every trial is reproduced bit for bit, in a different row order. Run on the deposited core data, every analysis
+reproduces the deposited results (checked on 2026-10-15: 93 of the 94 files byte for byte; the simulated trials of
+`runs/extension/budget_extension.pkl` are the same values in a different row order). On other platforms SNM runs can differ trial by trial (see `data/README.md` and the README of
+the repository).
 
 The analysis results (`analyses/runs/`, about 260 MB) are also deposited on Zenodo. With them in place the
 figures and tables can be rebuilt without running the analyses.
@@ -47,5 +51,6 @@ produces them is in [`../docs/reproduction.md`](../docs/reproduction.md).
 
 ## Environment
 
-Python 3.13 with NumPy 2.3, SciPy 1.17, pandas 2.3, NetworkX 3.6, Numba 0.63, Matplotlib 3.10 and seaborn 0.13
-(`../requirements.txt` gives the minimum versions). Fig. 1 uses Arial when it is installed.
+Python 3.13.9 on macOS 26.6 (Apple M4 Pro). `../requirements-lock.txt` lists the exact versions used (NumPy 2.3.5,
+SciPy 1.17.0, pandas 2.3.3, NetworkX 3.6.1, Numba 0.63.1, Matplotlib 3.10.8, seaborn 0.13.2);
+`../requirements.txt` gives the minimum versions. Fig. 1 uses Arial when it is installed.

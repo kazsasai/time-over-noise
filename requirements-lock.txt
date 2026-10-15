@@ -1,0 +1,13 @@
+# Exact versions with which the data, analyses, figures and tables of the paper were produced and checked.
+# Python 3.13.9 (Anaconda), macOS 26.6 on Apple silicon (M4 Pro, arm64).
+# Install with:  pip install -r requirements-lock.txt
+numpy==2.3.5
+scipy==1.17.0
+pandas==2.3.3
+networkx==3.6.1
+numba==0.63.1
+llvmlite==0.46.0
+matplotlib==3.10.8
+seaborn==0.13.2
+tqdm==4.67.3
+powerlaw==2.0.0

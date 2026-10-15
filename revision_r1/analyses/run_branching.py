@@ -5,7 +5,7 @@ stationary phase (bins after the first solution).  rk = Cov(A_t, A_{t+k}) / Var(
 lie inside the same phase segment of the same trial; fit rk = b m^k over k = 1..kmax.  m < 1 subcritical
 (perturbations decay), m ~ 1 marginal, m > 1 supercritical.  tau = -1 / ln m (sweeps).
 Each segment is demeaned first (DEMEAN; within-trial covariance).  Trial bootstrap (B=200).
-Output: runs/branching/branching.json (pooled-mean version kept as branching_pooledmean.json).  Run from revision_r1/analyses.
+Output: runs/branching/branching.json (by trial class: run_branching_by_class.py).  Run from revision_r1/analyses.
 """
 import json, os, warnings
 import numpy as np

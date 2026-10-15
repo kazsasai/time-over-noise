@@ -11,9 +11,14 @@ and the runners in `../../experiments/`. The same files are deposited on Zenodo 
 Each trial uses its own graph and initial colouring, both drawn from the trial seed; the same seed gives the same
 graph in both datasets and in every analysis that re-simulates trials (`../analyses/gcg_kick.py`).
 
-**Reproducibility.** Every trial is determined by its seed. Re-running trials of both datasets reproduces the
-stored values exactly (checked on 24 trials of each dataset). Generation took 30 minutes (long records, peak memory 12.3 GB) and 6 minutes
-(parameter scans, 5.1 GB) on an Apple M4 Pro with 14 worker processes.
+**Reproducibility.** Every trial is determined by its seed. Regenerating both datasets with `run_rev1_core.sh`
+on the platform and with the versions in `../../requirements-lock.txt` reproduced every trial bit for bit: all 18
+columns of all 20,000 and 200,000 trials agree with the deposited files (checked on 2026-10-15). The order of the
+rows differs from run to run, because the batched solver collects the trials as they finish, so the regenerated
+files are not byte-identical to the deposited ones. The analyses refer to trials by their row within each condition
+(for example when trials are resampled for bootstrap intervals). To reproduce the deposited intervals exactly, run
+the analyses on the deposited files. Generation took about 30 minutes (long records, peak memory 12.3 GB) and
+6 minutes (parameter scans, 5.1 GB) on an Apple M4 Pro with 14 worker processes.
 
 **Columns.** One row per trial: the parameters of the task (`seed`, `node_num`, `color_num`, `label`,
 `is_async_model`, `p_noise`, `p_async`, …), the outcome (`solved`, `solve_time`, 0-based round of the first proper

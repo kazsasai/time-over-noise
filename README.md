@@ -41,7 +41,7 @@ figures/, diagnostics/  figure and diagnostic scripts of the first version of th
 git clone https://github.com/kazsasai/time-over-noise.git
 cd time-over-noise
 python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.txt      # or requirements-lock.txt: the exact versions we used
 
 python -c "import gcg_solver; print('OK')"
 ```
@@ -55,9 +55,22 @@ python -c "import gcg_solver; print('OK')"
 2. **Analyses, figures, tables.** `bash revision_r1/run_all.sh` (or the stages `analyses`, `figures`, `tables`).
    The analysis results are also on Zenodo; with them, the figures and tables are rebuilt without the analyses.
 
-Every trial is determined by its seed, and the core data are bit-reproducible with the released solver.
 [`docs/reproduction.md`](docs/reproduction.md) maps each figure and table to its scripts and inputs, and
 [`revision_r1/README.md`](revision_r1/README.md) describes the analysis code.
+
+### Reproducibility
+
+Every trial is determined by its seed. On the platform we used (macOS on Apple silicon) with the versions in
+`requirements-lock.txt`, regenerating the core data reproduces every trial of the deposited files bit for bit; only
+the order of the rows differs, because the batched solver collects trials as they finish. Run on the deposited
+files, the analyses reproduce the deposited results. Bootstrap intervals depend on the row order, so on regenerated
+files they can differ slightly (see `revision_r1/data/README.md`).
+
+On other platforms or with other library versions, SNM runs can differ trial by trial. The SNM assigns its noise
+draws to the agents in the order given by `np.argsort` of their degrees, and the order of agents with equal degree
+can depend on the NumPy build. ARM runs do not depend on this order. The parameter scans of Fig. 6 were generated
+earlier. Re-running a sample of their trials on our platform reproduced the trials of Fig. 6a-d and the ARM trials
+of Fig. 6e, f bit for bit, and about 60% of the SNM trials of Fig. 6e, f, with the same solution rates.
 
 ## Solver
 
