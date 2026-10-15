@@ -1,79 +1,73 @@
 # Reproduction guide
 
-This document maps every figure in the main text and supplementary material
-to the runner that generates the underlying dataset and the figure-rendering
-script that consumes it.
+This guide maps every figure and supplementary table of the paper to the script that draws it, the analysis
+outputs it reads and the analysis scripts that produce them. In that table, scripts are given relative to
+`revision_r1/` and analysis outputs relative to `revision_r1/analyses/runs/`.
+`revision_r1/run_all.sh` runs every step in dependency order with the arguments used for the paper.
 
-All paths are relative to the repository root. Data files (`result_*.pkl`)
-are not in Git; download them from the Zenodo archive or regenerate by
-running the corresponding runner.
+## Data
 
-All scripts expect to be invoked from the repository root, e.g.
-`python experiments/run_plateau_k34.py`.
+| Dataset | Runner (`experiments/`) | Read by (`revision_r1/analyses/`) |
+|---|---|---|
+| `revision_r1/data/result_for_criticality_20_3.pkl` (long records) | `run_criticality_20_3.py`, via `revision_r1/data/run_rev1_core.sh` | `avalanche_histograms.py`, `export_supp_data.py`, `pre_solution.py`, `run_branching.py`, `run_episodes.py`, `run_first_passage.py`, `run_graph_types.py`, `run_kick.py`, `run_spectra.py`, `save_trial_types.py`, `spectra_supplement.py` |
+| `revision_r1/data/result_for_phase_space_20_3.pkl` (parameter scans) | `run_phase_space_20_3.py`, via `revision_r1/data/run_rev1_core.sh` | `run_first_passage.py`, `run_robustness.py` |
+| `result_for_plateau_k34.pkl` (Fig. 6a-d) | `run_plateau_k34.py` | `fig6_numbers.py`, `run_fpt_size.py`, `run_supp_extra.py` |
+| `result_for_scalability.pkl` (Fig. 6e, f) | `run_scalability.py` | `fig6_numbers.py` |
 
----
+Some analyses run new simulations with the graphs and seeds of the core data: the control experiments
+(`run_factorial_2x2.py`, `pilot_E1_E4.py`, with `gcg_variants.py`), the injected inconsistencies and colour histories
+(`run_kick.py`, `run_kick_growth.py`, `run_graph_types.py`, `run_departure_mechanism.py`, `run_agent_spectra.py`, with
+`gcg_kick.py`), the mixed models and network ensembles (`run_supp_extra.py`) and the step-budget extension
+(`run_budget_extension.py`). `gcg_variants.py` and `gcg_kick.py` reproduce `gcg_solver.py` bit for bit where their
+settings coincide.
 
-## Main text
+## Figures and tables
 
-| Figure | Runner (experiments/) | Output pkl | Figure script (figures/) |
-| --- | --- | --- | --- |
-| **Fig. 1** Concept schematic | — | — | — (hand-drawn in Keynote; final asset: `tex/diagram.pdf`) |
-| **Fig. 2** Time-series evolution | generated in-script | — | `fig2_timeseries.py` |
-| **Fig. 3** Universality | `run_phase_space_20_3.py` | `result_for_phase_space_20_3.pkl` | `fig3_universality.py` |
-| **Fig. 4** SOC signatures (FFT, avalanches) | `run_criticality_20_3.py` | `result_for_criticality_20_3.pkl` | `fig4_criticality.py` |
-| **Fig. 5** Scalability / topology | `run_scalability.py` + `run_plateau_k34.py` | `result_for_scalability.pkl`, `result_for_plateau_k34.pkl` | `fig5_scalability.py` |
+| Item | Script | Analysis outputs read (`analyses/runs/`) | Produced by (`analyses/`) |
+|---|---|---|---|
+| Fig. 1 | `figures_final/fig1/plot_fig1.py` | — | — |
+| Fig. 2 | `figures_final/fig2/plot_fig2.py` | simulated in the script with `gcg_solver.py` | — |
+| Fig. 3 | `figures_final/plot_fig3.py` | `fpt/factorial_2x2.json`<br>`fpt/first_passage.json`<br>`fpt/mannwhitney.json`<br>`fpt/survival_at_optima.json` | `run_factorial_2x2.py`<br>`run_first_passage.py`<br>`run_mannwhitney.py` |
+| Fig. 4 | `figures_final/plot_fig4.py` | `fpt/first_passage.json`<br>`robust/robustness.json` | `run_first_passage.py`<br>`run_robustness.py` |
+| Fig. 5 | `figures_final/plot_fig5.py` | `aval/hist_ARM_*.npz`<br>`aval/planC_sweep/episodes.json`<br>`aval/planC_sweep/planC.json`<br>`kick/kick_growth.json`<br>`kick/kick_raw_*_*.npz` | `avalanche_histograms.py`<br>`run_episodes.py`<br>`run_kick.py`<br>`run_kick_growth.py`<br>`run_planC.py --tag sweep` |
+| Fig. 6 | `figures_final/plot_fig6.py` | `fig6/fig6_grids.json` | `fig6_numbers.py` |
+| Supplementary Fig. S1 | `figures_final_supp/plot_SF.py` | `fpt/first_passage.json` | `run_first_passage.py` |
+| Supplementary Fig. S2 | `figures_final_supp/plot_SG.py` | `aval/hist_*_*.npz`<br>`fpt/solve_times_long.npz`<br>`pre/pre_solution.json` | `avalanche_histograms.py`<br>`export_supp_data.py`<br>`pre_solution.py` |
+| Supplementary Fig. S3 | `figures_final_supp/plot_extra.py (hybrid)` | `supp/hybrid.json` | `run_supp_extra.py` |
+| Supplementary Fig. S4 | `figures_final_supp/plot_SA.py` | `aval/hist_*_*.npz`<br>`aval/planC_sweep/planC.json` | `avalanche_histograms.py`<br>`run_planC.py --tag sweep` |
+| Supplementary Fig. S5 | `figures_final_supp/plot_SB.py` | `aval/hist_*_*.npz`<br>`aval/hump_lowercut_sensitivity.json`<br>`aval/hump_same_region.json`<br>`aval/mle_sweep/point.json` | `avalanche_histograms.py`<br>`hump_same_region.py`<br>`run_aval_mle.py`<br>`run_hump_lowercut.py` |
+| Supplementary Fig. S6 | `figures_final_supp/plot_SC.py` | `aval/hist_*_*.npz`<br>`aval/planC_*/planC.json` | `avalanche_histograms.py`<br>`run_planC.py (all tags)` |
+| Supplementary Fig. S7 | `figures_final_supp/plot_SH.py` | `branching/branching.json`<br>`branching/branching_by_class.json`<br>`kick/kick_growth.json`<br>`kick/kick_raw_*_*.npz`<br>`kick/kick_raw_ARM_*.npz`<br>`kick/kick_vs_natural_large.json` | `run_branching.py`<br>`run_kick.py`<br>`run_kick_growth.py`<br>`run_kick_vs_natural.py` |
+| Supplementary Fig. S8 | `figures_final_supp/plot_SD.py` | `spec/spectra.json`<br>`spec/spectra_supplement.json`<br>`spec/spectrum_curves.npz` | `export_supp_data.py`<br>`run_spectra.py`<br>`spectra_supplement.py` |
+| Supplementary Fig. S9 | `figures_final_supp/plot_SE.py` | `agentspec/agent_spectra.json`<br>`agentspec/agent_spectra_curves.npz` | `export_supp_data.py`<br>`run_agent_spectra.py` |
+| Supplementary Fig. S10 | `figures_final_supp/plot_extra.py (plateau)` | `fig6/fig6_grids.json`<br>`supp/plateau.json` | `fig6_numbers.py`<br>`run_supp_extra.py` |
+| Supplementary Fig. S11 | `figures_final_supp/plot_extra.py (fpt_size)` | `fpt_size/fpt_size.json` | `run_fpt_size.py` |
+| Supplementary Fig. S12 | `figures_final_supp/plot_extra.py (networks)` | `supp/colourability.json`<br>`supp/networks.json` | `run_colourability.py`<br>`run_supp_extra.py` |
+| Supplementary Table S1 | `tables/make_tables.py (passage_table)` | `fpt/factorial_2x2.json`<br>`fpt/first_passage.json`<br>`fpt/mannwhitney.json`<br>`robust/robustness.json` | `run_factorial_2x2.py`<br>`run_first_passage.py`<br>`run_mannwhitney.py`<br>`run_robustness.py` |
+| Supplementary Table S2 | `tables/make_tables.py (controls_table)` | `pilots/pilot_e1_snm_minconf.pkl`<br>`pilots/pilot_e2_sync_gated_q.pkl`<br>`pilots/pilot_factorial.pkl` | `pilot_E1_E4.py` |
+| Supplementary Table S3 | `tables/make_tables.py (population_table)` | `aval/planC_*/planC.json`<br>`aval/planC_sweep/episodes.json`<br>`aval/planC_sweep/planC.json`<br>`aval/planC_sweep/sstar_rule_sensitivity.json` | `run_episodes.py`<br>`run_planC.py (all tags)`<br>`run_planC.py --tag sweep`<br>`run_sstar_rule_sweep.py` |
+| Supplementary Table S4 | `tables/make_tables.py (population_table)` | `aval/planC_*/planC.json`<br>`aval/planC_sweep/episodes.json`<br>`aval/planC_sweep/planC.json`<br>`aval/planC_sweep/sstar_rule_sensitivity.json` | `run_episodes.py`<br>`run_planC.py (all tags)`<br>`run_planC.py --tag sweep`<br>`run_sstar_rule_sweep.py` |
+| Supplementary Table S5 | `tables/make_tables.py (mle_tables)` | `aval/hist_ARM_*.npz`<br>`aval/mle_sweep/boot.json`<br>`aval/mle_sweep/point.json`<br>`aval/planC_sweep/planC.json` | `avalanche_histograms.py`<br>`run_aval_mle.py`<br>`run_aval_mle_boot.py`<br>`run_planC.py --tag sweep` |
+| Supplementary Table S6 | `tables/make_tables.py (mle_tables)` | `aval/hist_ARM_*.npz`<br>`aval/mle_sweep/boot.json`<br>`aval/mle_sweep/point.json`<br>`aval/planC_sweep/planC.json` | `avalanche_histograms.py`<br>`run_aval_mle.py`<br>`run_aval_mle_boot.py`<br>`run_planC.py --tag sweep` |
+| Supplementary Table S7 | `tables/make_tables.py (knee_table)` | `aval/hump_same_region.json` | `hump_same_region.py` |
+| Supplementary Table S8 | `tables/make_tables.py (spectra_table)` | `agentspec/agent_spectra.json`<br>`spec/spectra.json`<br>`spec/spectra_supplement.json` | `run_agent_spectra.py`<br>`run_spectra.py`<br>`spectra_supplement.py` |
+| Supplementary Table S9 | `tables/make_tables.py (departure_table)` | `departure/departure_summary.json` | `run_departure_mechanism.py` |
+| Supplementary Table S10 | `tables/make_tables.py (mle_population_table)` | `aval/hist_*_*.npz`<br>`aval/mle_pop/boot.json`<br>`aval/mle_pop/point.json`<br>`aval/planC_sweep/planC.json` | `avalanche_histograms.py`<br>`run_aval_mle_pop.py`<br>`run_planC.py --tag sweep` |
+| Supplementary Table S11 | `tables/make_tables.py (graph_type_table)` | `graph_types/graph_types.json` | `run_graph_types.py` |
 
-## Supplementary material
+`aval/hist_*_*.npz` are the per-trial avalanche-size histograms of the long records; `figure_common.pooled()` reads
+them for Supplementary Figs S2 and S4-S6. Supplementary Figs S1-S2, S4-S9 are written by `figures_final_supp` as
+`fig_SF`, `fig_SG`, `fig_SA`, `fig_SB`, `fig_SC`, `fig_SH`, `fig_SD` and `fig_SE` (in the order S1, S2, S4, S5, S6,
+S7, S8, S9), and S3, S10-S12 as `fig_hybrid`, `fig_plateau`, `fig_fpt_size` and `fig_networks`.
 
-| Figure | Runner | Output pkl | Figure script |
-| --- | --- | --- | --- |
-| Supp. avalanche CCDF | (reuses Fig. 4 data) | `result_for_criticality_20_3.pkl` | `fig_supp_ccdf.py` |
-| Supp. network topology (ER, WS, BA) | generated in-script | — | `fig_supp_networks.py` |
-| Supp. hybrid human–agent | `run_static_random_20_3.py` | `result_static_random_20_3.pkl` | `fig_supp_hybrid.py` |
-| Supp. 2×2 conditions | (various) | multiple | `fig_2x2_conditions.py`, `fig_2x2_bar.py` |
+## Numbers quoted in the text
 
-## Auxiliary runners
+Every number quoted in the text was recomputed from these outputs. The numbers of the supplementary text are
+collected by `tables/make_tables.py` in `tables/quoted_numbers.json`; those of Fig. 6 by `analyses/fig6_numbers.py`
+in `analyses/runs/fig6/fig6_numbers.json`.
 
-These runners produce datasets that are reused across multiple figures or
-appear in supplementary tables:
+## First submission
 
-| Runner | Output | Notes |
-| --- | --- | --- |
-| `run_criticality_100_4.py`       | `result_for_criticality_100_4.pkl`     | k=4, N=100 |
-| `run_criticality_100_15.py`      | `result_for_criticality_100_15.pkl`    | k=15, N=100 |
-| `run_criticality_500_3.py`       | `result_for_criticality_500_3.pkl`     | k=3, N=500 |
-| `run_criticality_500_20.py`      | `result_for_criticality_500_20.pkl`    | k=20, N=500 |
-| `run_criticality_500_32.py`      | `result_for_criticality_500_32.pkl`    | k=32, N=500 |
-| `run_criticality_N40_k3.py`      | `result_criticality_N40_k3.pkl`        | k=3, N=40 |
-| `run_criticality_multiN_k3.py`   | `result_criticality_multiN_k3.pkl`     | k=3, N∈{20,50,100} |
-| `run_criticality_multiN_k3_long.py` | `result_criticality_multiN_k3_long.pkl` | long-run variant |
-| `run_plateau.py`                 | `result_for_plateau.pkl`               | coarse plateau sweep |
-| `run_size_color.py`              | `result_for_size_color.pkl`            | coarse N×k grid |
-| `run_size_color_1k.py`           | `result_for_size_color_1k.pkl`         | cluster-scale N×k grid |
-
----
-
-## Wall-time estimates
-
-Approximate wall-time on a 2024-class laptop (Apple M4 Pro, 14 cores, CPU
-path only). GPU path typically gives a 5–20× speed-up for N ≤ 250.
-
-| Runner | Parameters | CPU time |
-| --- | --- | --- |
-| `run_criticality_20_3.py`        | N=20, k=3, 500 trials × 100k steps, 11 p values | ~6 h |
-| `run_plateau_k34.py`             | N=20..100, k=3,4, 200 trials × 10k steps        | ~4 h |
-| `run_scalability.py`             | large N×k sweep                                  | ~8 h |
-| `run_phase_space_20_3.py`        | N=20, k=3, 1k trials × 1k steps, 100 p values   | ~2 h |
-| `run_size_color_1k.py`           | N=20..1000, k=2..100                             | cluster-scale |
-
----
-
-## Seeding
-
-All runners fix a `MASTER_SEED` at the top of the file; per-trial seeds are
-derived deterministically from it. Running the same runner twice on the same
-machine with the same library versions should produce bit-identical output.
-
-If you see non-trivial numerical differences, check your NumPy and Numba
-versions against `requirements.txt` — Numba's `@njit(cache=True)` can mask
-behavioural changes across minor versions.
+The scripts in `figures/` and `diagnostics/` draw the figures of the first version of the manuscript from the data
+of that version; they are archived with release v1.0 (Zenodo DOI 10.5281/zenodo.19812421). The runners in
+`experiments/` are shared by both versions.

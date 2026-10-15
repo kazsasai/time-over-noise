@@ -1,29 +1,41 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite the accompanying paper."
-title: "Source code for: Time over noise — Asynchrony unlocks robust coordination beyond behavioural fluctuations"
+message: "If you use this software, please cite the accompanying paper and the Zenodo archive."
+title: "Time over noise: Coordination from the unresolved inconsistencies of individual timing (code)"
 abstract: >-
-  Reference implementation of the Synchronous Noise Model (SNM) and the
-  Asynchronous Random Model (ARM) on the distributed graph-colouring problem,
-  together with the runners and figure-generation scripts that reproduce the
-  results of the accompanying paper.
+  Solver of the synchronous noise model (SNM) and the asynchronous random model
+  (ARM) on the distributed graph-colouring problem, the runners that generate
+  the simulation datasets, and the analyses that produce every figure and
+  supplementary table of the accompanying paper.
 type: software
+version: "2.0"
+date-released: "2026-10-15"
 authors:
   - family-names: "Sasai"
     given-names: "Kazuto"
-    email: kazutosasai@gmail.com
+    email: kazuto.sasai.z@vc.ibaraki.ac.jp
+    affiliation: "Ibaraki University"
   - family-names: "Soga"
     given-names: "Yuto"
+    affiliation: "Ibaraki University"
   - family-names: "Gunji"
     given-names: "Yukio-Pegio"
+    affiliation: "Waseda University"
 license: MIT
 repository-code: "https://github.com/kazsasai/time-over-noise"
 identifiers:
   - type: doi
-    value: 10.5281/zenodo.19812421
-    description: "Zenodo archive of the source code and processed simulation outputs"
+    value: 10.5281/zenodo.19812420
+    description: "Zenodo archive of the code and data (all versions)"
+keywords:
+  - collective behaviour
+  - human network experiments
+  - graph colouring
+  - individual time
+  - asynchronous updating
+  - intermittency
 preferred-citation:
   type: article
-  title: "Time over noise: Asynchrony unlocks robust coordination beyond behavioural fluctuations"
+  title: "Time over noise: Coordination from the unresolved inconsistencies of individual timing"
   authors:
     - family-names: "Sasai"
       given-names: "Kazuto"
@@ -32,5 +44,3 @@ preferred-citation:
     - family-names: "Gunji"
       given-names: "Yukio-Pegio"
   year: 2026
-  journal: "Nature Communications"
-  doi: "10.xxxx/xxxxx"

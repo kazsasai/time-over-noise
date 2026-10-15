@@ -44,3 +44,12 @@ Thumbs.db
 # --- Logs ---
 *.log
 log_*.txt
+
+# --- Outputs of revision_r1 (rebuilt by revision_r1/run_all.sh; analysis results deposited on Zenodo) ---
+*.png
+revision_r1/analyses/runs/
+revision_r1/data/*.log
+revision_r1/tables/*.tex
+revision_r1/tables/quoted_numbers.json
+revision_r1/tables/build/
+.matplotlib/
