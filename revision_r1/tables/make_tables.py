@@ -428,6 +428,7 @@ def passage_table(Q):
         if model == 'SNM':
             rows.append('\\midrule')
     m = mw['long_SNM_0.05|long_ARM_0.45|sweeps']          # all trials are solved in the 50,000-round records
+    pr = mw['long_SNM_0.05|long_ARM_0.45|sweeps|paired']  # trials paired by seed (same graph and initial colouring)
     Q['S6_med'] = f"{m['med_x']:.1f} and {m['med_y']:.1f} sweeps"; Q['S6_mw'] = f"p = {m['p']:.3f}"
     Q['S6_held'] = f'{100 * min(held):.0f}–{100 * max(held):.1f}%'
     Q['S6_never'] = f'{100 * min(never):.0f}–{100 * max(never):.0f}%'
@@ -442,7 +443,8 @@ def passage_table(Q):
              'Returns, returns to a consistent colouring per 1{,}000 sweeps after the first solution, pooled over trials (sweep clock). '
              'Random reselections per sweep before and after the first solution (1{,}000-round records): $\\varepsilon N$ for the SNM, the number of active gridlocked agents for the ARM. '
              f"At the representative values the median times are {m['med_x']:.1f} (SNM, $\\varepsilon=0.05$) and {m['med_y']:.1f} sweeps (ARM, $p=0.45$); "
-             f"Mann--Whitney $p = {m['p']:.3f}$ over all trials.")
+             f"over all trials, paired by trial, the SNM needs a median of {-pr['median_diff']:.1f} fewer sweeps (95\\% interval {-pr['median_diff_hi']:.1f}--{-pr['median_diff_lo']:.1f}; "
+             f"Wilcoxon signed-rank $p = {pr['p']:.3f}$), and the unpaired Mann--Whitney test gives $p = {m['p']:.3f}$.")
     header = [' & \\multicolumn{2}{c}{Reached (\\%)} & \\multicolumn{2}{c}{Median first solution} & \\multicolumn{4}{c}{Holding} & \\multicolumn{2}{c}{Reselections / sweep}',
               '\\cmidrule(lr){2-3}\\cmidrule(lr){4-5}\\cmidrule(lr){6-9}\\cmidrule(lr){10-11}',
               'Model & 1{,}000 r & 50{,}000 r & sweeps [95\\% CI] & rounds & held (\\%) & if left (\\%) & never (\\%) & returns & before & after']

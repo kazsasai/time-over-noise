@@ -9,7 +9,7 @@ def main():
     fig,axes=plt.subplots(3,2,figsize=(7.2,8.0))
     fig.subplots_adjust(left=.105,right=.975,top=.955,bottom=.06,hspace=.65,wspace=.40)
     # a, b: the two populations analysed separately, each normalised within itself (R1-3)
-    pops=[('a','Within the solved state',['solved']),('b','Including an unsolved state',['resolve','open'])]
+    pops=[('a','Solved at every bin end',['solved']),('b','Unsolved at some bin end',['resolve','open'])]
     for j,(letter,title,keys) in enumerate(pops):
         ax=axes[0,j]; panel(ax,letter,title)
         for p,col in zip([.05,.45,.85],ARM_SHADES[:3]):
