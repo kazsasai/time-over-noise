@@ -1,7 +1,7 @@
 """
 Plateau analysis at fixed k=3 and k=4, varying N=20..100
 Both SNM and ARM, varying p/ε from 0.00 to 1.00 (step 0.05)
-500 trials per condition
+200 trials per condition (master seed 7777)
 step_max=10000
 
 Output: result_for_plateau_k34.pkl

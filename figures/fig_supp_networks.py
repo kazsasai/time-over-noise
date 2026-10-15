@@ -93,8 +93,8 @@ if __name__ == '__main__':
     fig, axes = plt.subplots(1, 3, figsize=(13, 4.5), sharey=True,
                              gridspec_kw={'wspace': 0.12})
 
-    col_snm = '#E8986A'
-    col_arm = 'steelblue'
+    col_snm = sns.color_palette('colorblind')[0]   # blue   – SNM (as in main-text figures)
+    col_arm = sns.color_palette('colorblind')[1]   # orange – ARM (as in main-text figures)
 
     for ax, (gtype, gtitle, _) in zip(axes, graphs):
         snm_r = data[(gtype, 'SNM')]

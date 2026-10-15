@@ -1,5 +1,5 @@
 """
-Phase-space sweep at N=20, k=3 used in Fig. 3 (universality).
+Parameter scans at N=20, k=3 (core data; see revision_r1/data/README.md).
 
 Design:
   N        : 20

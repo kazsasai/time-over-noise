@@ -1,19 +1,17 @@
 """
-Run criticality simulation at N=20, k=3 with longer time series → result_for_criticality_20_3.pkl
+Long records at N=20, k=3 (core data; see revision_r1/data/README.md) → result_for_criticality_20_3.pkl
 
-Goal:
-  Improve FFT quality by using longer time series (100,000 steps).
-  The post-solve dynamics at N=20, k=3 show re-conflict events that need
-  longer observation windows for clear 1/f characterization.
-
-Design:
+Design (matches the Methods: 1,000 trials, 50,000 steps each):
   N        : 20
-  k        : 3  (≈ χ(G) for BA m=2 → chromatic boundary)
-  p values : 11 values (0.00, 0.05, 0.15, ..., 0.95)
-  trials   : 500 per (model, p)
-  step_max : 100000
-  history  : True
-  Total tasks: 11 × 2 models × 500 = 11,000
+  k        : 3   (chromatic boundary for BA m=2)
+  p values : 10 values (0.05, 0.15, ..., 0.95), for both SNM (p = ε) and ARM (p = freezing prob.)
+  trials   : 1,000 per (model, p)
+  step_max : 50,000
+  history  : True (per-step changed-node count, conflict ratio, gridlock count)
+  Total tasks: 10 × 2 models × 1,000 = 20,000
+
+Note: P_LIST is generated as `np.arange(10) / 10 + 0.05` (not rounded) so that the
+stored float values match those used by the figure scripts.
 """
 
 import multiprocessing as mp
@@ -27,49 +25,50 @@ import sys
 sys.path.insert(0, '.')
 import gcg_solver
 
-master_seed = 2030
-num_trials  = 500
-step_max    = 100000
-node_num    = 20
-color_num   = 3
+MASTER_SEED = 2024
+NUM_TRIALS  = 1000
+STEP_MAX    = 50000
+NODE_NUM    = 20
+COLOR_NUM   = 3
+P_LIST      = np.arange(10) / 10 + 0.05
 
-p_values = np.round([0.00, 0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95], 4)
-
-rng   = np.random.default_rng(master_seed)
-seeds = rng.integers(0, 10**9, size=num_trials)
-
-models = [
+MODELS = [
     {'label': 'Noise Model', 'is_async_model': False},
     {'label': 'Async Model', 'is_async_model': True},
 ]
 
-if __name__ == '__main__':
+
+def build_tasks():
+    rng   = np.random.default_rng(MASTER_SEED)
+    seeds = rng.integers(0, 10**9, size=NUM_TRIALS)
     tasks = []
-
-    for model_conf in models:
-        is_async = model_conf['is_async_model']
-        for p in p_values:
+    for p in P_LIST:
+        for model in MODELS:
+            is_async = model['is_async_model']
             for s in seeds:
-                task = {
-                    'seed': int(s),
-                    'node_num': node_num,
-                    'color_num': color_num,
-                    'ba_m': 2,
-                    'bot_num': node_num,
-                    'bot_type': 'c',
-                    'step_max': step_max,
+                tasks.append({
+                    'seed':           int(s),
+                    'node_num':       NODE_NUM,
+                    'color_num':      COLOR_NUM,
+                    'ba_m':           2,
+                    'bot_num':        NODE_NUM,
+                    'bot_type':       'c',
+                    'step_max':       STEP_MAX,
                     'return_history': True,
-                    'label': model_conf['label'],
+                    'label':          model['label'],
                     'is_async_model': is_async,
-                    'p_noise': float(p) if not is_async else 0.0,
-                    'p_async': float(p) if is_async     else 0.0,
-                }
-                tasks.append(task)
+                    'p_noise':        float(p) if not is_async else 0.0,
+                    'p_async':        float(p) if is_async     else 0.0,
+                })
+    return tasks
 
+
+if __name__ == '__main__':
+    tasks = build_tasks()
     print(f"Total tasks  : {len(tasks):,}")
-    print(f"N={node_num}, k={color_num}  (chromatic boundary for BA m=2)")
-    print(f"p values     : {p_values.tolist()}")
-    print(f"Trials       : {num_trials}  |  step_max: {step_max:,}")
+    print(f"N={NODE_NUM}, k={COLOR_NUM}  (chromatic boundary for BA m=2)")
+    print(f"p values     : {P_LIST.tolist()}")
+    print(f"Trials       : {NUM_TRIALS}  |  step_max: {STEP_MAX:,}")
 
     df = gcg_solver.run_parallel_simulation_batched(tasks)
     df.to_pickle("./result_for_criticality_20_3.pkl")

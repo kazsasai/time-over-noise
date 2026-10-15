@@ -328,8 +328,13 @@ best_large_arr = [arm_results[f'{p:.2f}']['best_large']
                   if arm_results.get(f'{p:.2f}') else 'N/A'
                   for p in p_list_bp_all]
 
-# τ_large where TPL wins (universal exponent)
-tpl_large_mask = np.array([b == 'TPL' for b in best_large_arr])
+delta_slope_arr = np.array([arm_results[f'{p:.2f}']['knee']['delta_slope']
+                            if arm_results.get(f'{p:.2f}') and arm_results[f'{p:.2f}']['knee'] else np.nan
+                            for p in p_list_bp_all])
+
+# τ_large where TPL wins on a direction-valid knee (Δslope > 0; Methods).
+# Knees from the min-RSS fallback (Δslope ≤ 0) do not define a two-scale split and are excluded.
+tpl_large_mask = np.array([b == 'TPL' for b in best_large_arr]) & (delta_slope_arr > 0)
 exp_large_mask = np.array([b == 'EXP' for b in best_large_arr])
 
 tau_large_tpl = np.where(tpl_large_mask, tau_large_arr, np.nan)
@@ -337,7 +342,8 @@ lam_large_exp = np.where(exp_large_mask, tau_large_arr, np.nan)  # λ stored in 
 
 valid_small = np.isfinite(tau_small_arr)
 if tpl_large_mask.any():
-    print(f"\nARM τ_large (TPL, p≤0.65): {np.nanmean(tau_large_tpl):.3f} ± {np.nanstd(tau_large_tpl):.3f}")
+    print(f"\nARM τ_large (TPL, direction-valid knee; p = {p_list_bp_all[tpl_large_mask].tolist()}): "
+          f"{np.nanmean(tau_large_tpl):.3f} ± {np.nanstd(tau_large_tpl):.3f}")
 
 # ── Plot settings ─────────────────────────────────────────────────────────────
 palette_disp = sns.color_palette('colorblind', n_colors=len(p_list_display))
@@ -358,7 +364,7 @@ for idx, p in enumerate(p_list_display):
     ms = 4   if lp == '0.05' else 3
     axes[0,0].scatter(log_freq, df_fft_n[lp],
                       color=palette_disp[idx], s=ms, alpha=al, label=lp, rasterized=True)
-axes[0,0].set_title(r'SNM: power spectrum ($N=20$)', fontsize=12, pad=6)
+axes[0,0].set_title(r'SNM: amplitude spectrum ($N=20$)', fontsize=12, pad=6)
 axes[0,0].legend(title=r'$\varepsilon$', loc='upper right',
                  fontsize=8, title_fontsize=8, framealpha=0.85, markerscale=3)
 
@@ -369,13 +375,13 @@ for idx, p in enumerate(p_list_display):
     lp = f'{p:.2f}'
     axes[0,1].scatter(log_freq, df_fft_a[lp],
                       color=palette_disp[idx], s=3, alpha=0.35, label=lp, rasterized=True)
-axes[0,1].set_title(r'ARM: power spectrum ($N=20$)', fontsize=12, pad=6)
+axes[0,1].set_title(r'ARM: amplitude spectrum ($N=20$)', fontsize=12, pad=6)
 axes[0,1].legend(title=r'$p$', loc='upper right',
                  fontsize=8, title_fontsize=8, framealpha=0.85, markerscale=3)
 
 for ax in axes[0, :2]:
     ax.set_xlabel(r'Frequency $f$', fontsize=11)
-    ax.set_ylabel(r'Power $|\hat{C}(f)|$', fontsize=11)
+    ax.set_ylabel(r'Amplitude $|\hat{C}(f)|$', fontsize=11)
     ax.xaxis.set_major_formatter(log10_fmt)
     ax.yaxis.set_major_formatter(log10_fmt)
     sns.despine(ax=ax)
@@ -497,7 +503,7 @@ if tpl_large_mask.any():
 
 ax_f.set_xlabel(r'$p$ / $\varepsilon$', fontsize=11)
 ax_f.set_ylabel(r'Exponent', fontsize=11)
-ax_f.set_title(r'B\&P exponents vs $p$', fontsize=12, pad=6)
+ax_f.set_title(r'B&P exponents vs $p$', fontsize=12, pad=6)
 ax_f.legend(fontsize=9, framealpha=0.85, loc='upper left')
 sns.despine(ax=ax_f)
 
