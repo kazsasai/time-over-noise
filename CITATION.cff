@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite the accompanying paper and the Zenodo archive."
-title: "Time over noise: Coordination from the unresolved inconsistencies of individual timing (code)"
+title: "Time over noise: Coordination with the unresolved inconsistencies of individual timing (code)"
 abstract: >-
   Solver of the synchronous noise model (SNM) and the asynchronous random model
   (ARM) on the distributed graph-colouring problem, the runners that generate
@@ -35,7 +35,7 @@ keywords:
   - intermittency
 preferred-citation:
   type: article
-  title: "Time over noise: Coordination from the unresolved inconsistencies of individual timing"
+  title: "Time over noise: Coordination with the unresolved inconsistencies of individual timing"
   authors:
     - family-names: "Sasai"
       given-names: "Kazuto"

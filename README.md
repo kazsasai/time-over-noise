@@ -1,8 +1,8 @@
-# Time over noise: Coordination from the unresolved inconsistencies of individual timing
+# Time over noise: Coordination with the unresolved inconsistencies of individual timing
 
 Code for the paper
 
-> **Sasai, K., Soga, Y. & Gunji, Y.-P.** *Time over noise: Coordination from the unresolved inconsistencies of
+> **Sasai, K., Soga, Y. & Gunji, Y.-P.** *Time over noise: Coordination with the unresolved inconsistencies of
 > individual timing.* (2026, in revision.)
 
 Individuals in human groups and animal collectives perceive only their surroundings and act on their own time.
