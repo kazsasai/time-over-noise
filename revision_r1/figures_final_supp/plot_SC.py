@@ -15,7 +15,7 @@ def compare(ax, variants, key, log=False):
              linestyle=sty, marker='o', markersize=2.5)
     parameter(ax)
     if log:
-        ax.set_yscale('log'); ax.set_ylabel('Mean excess size (colour changes)')
+        ax.set_yscale('log'); ax.set_ylabel('Mean excess size (color changes)')
     else:
         fraction(ax); ax.set_ylabel('Resolved share of large avalanches')
 
@@ -48,7 +48,7 @@ def main():
         r=load('sweep' if j==0 else 'A3_sweep_th1_k2')[4]
         ax.axvline(r['s_star'],color=GREY,ls='--',lw=.8)
         ax.set(xscale='log',yscale='log',ylim=(1e-7,1.2),xlim=(2,50000),
-               xlabel='Size $s$ (colour changes)',ylabel=r'Fraction of all avalanches $\geq s$')
+               xlabel='Size $s$ (color changes)',ylabel=r'Fraction of all avalanches $\geq s$')
         if j==0: ax.legend(loc='upper right',fontsize=6.7)
     for j,p in enumerate([.05,.15]):
         ax=axs[4,j];panel(ax,chr(105+j),rf'SNM $\epsilon$ = {p:.2f}')
@@ -59,7 +59,7 @@ def main():
                 ccdf(ax,s,n,denominator=total,color=col,ls=sty,
                      label=('Sweep' if key=='sweep' else 'Step')+', '+c)
         ax.set(xscale='log',yscale='log',ylim=(1e-7,1.2),
-               xlabel='Size $s$ (colour changes)',ylabel=r'Fraction of all avalanches $\geq s$')
+               xlabel='Size $s$ (color changes)',ylabel=r'Fraction of all avalanches $\geq s$')
         if j==0:ax.legend(fontsize=6.5)
     finish(fig,'C')
 

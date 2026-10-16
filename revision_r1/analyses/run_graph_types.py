@@ -8,7 +8,7 @@ of the graph (seed) and is the same at every p.
 A. Holding and returns after the first solution: retention() of run_first_passage.py on each subset of the core data.
 B. Avalanche populations: the per-trial histograms of avalanche_histograms.py (trial index = row order of each
    (model, p) group of the core data), split by the graph of each trial; s* is the pooled value of planC.json.
-C. Injected inconsistencies: the kicked runs of run_kick.py and run_kick_growth.py (identical task), re-simulated with
+C. Injected conflicts: the kicked runs of run_kick.py and run_kick_growth.py (identical task), re-simulated with
    the seed kept so that each response can be assigned to its graph.  The cascade probability is pooled over injections
    (cascades / injections); its 95% interval comes from bootstrap over graphs, each graph keeping all its injections,
    because the up to 40 injections of a trial share one graph (also for all graphs together: Supplementary Fig. S7j).

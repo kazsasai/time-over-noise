@@ -3,12 +3,12 @@ message: "If you use this software, please cite the accompanying paper and the Z
 title: "Time over noise: Coordination with the unresolved inconsistencies of individual timing (code)"
 abstract: >-
   Solver of the synchronous noise model (SNM) and the asynchronous random model
-  (ARM) on the distributed graph-colouring problem, the runners that generate
+  (ARM) on the distributed graph-coloring problem, the runners that generate
   the simulation datasets, and the analyses that produce every figure and
   supplementary table of the accompanying paper.
 type: software
-version: "2.1"
-date-released: "2026-10-15"
+version: "2.2"
+date-released: "2026-10-16"
 authors:
   - family-names: "Sasai"
     given-names: "Kazuto"
@@ -27,9 +27,9 @@ identifiers:
     value: 10.5281/zenodo.19812420
     description: "Zenodo archive of the code and data (all versions)"
 keywords:
-  - collective behaviour
+  - collective behavior
   - human network experiments
-  - graph colouring
+  - graph coloring
   - individual time
   - asynchronous updating
   - intermittency

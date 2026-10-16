@@ -196,11 +196,11 @@ def draw_d(fig):
     frame(ax, 194, 39, 225, 111, radius=29, linewidth=1.55)
     node(ax, 262, 95, "orange")
     node(ax, 353, 95, "green")
-    label(ax, 306, 191, "Neighbours' colours")
+    label(ax, 306, 191, "Neighbors' colors")
     node(ax, 198, 300, "orange")
     node(ax, 416, 300, "blue")
     arrow(ax, (261, 300), (351, 300))
-    label(ax, 306, 368, "Move to the conflict-free colour", size=8.5)
+    label(ax, 306, 368, "Move to the conflict-free color", size=8.5)
 
     # Middle: either remaining colour resolves the conflict.
     frame(ax, 677, 39, 225, 111, radius=29, linewidth=1.55)
@@ -210,7 +210,7 @@ def draw_d(fig):
     node(ax, 850, 342, "green")
     arrow(ax, (707, 296), (798, 259))
     arrow(ax, (707, 296), (798, 333))
-    label(ax, 782, 407, "Choose among\nconflict-free colours", size=8.5)
+    label(ax, 782, 407, "Choose among\nconflict-free colors", size=8.5)
 
     # Right: all three colours are occupied, so noise/randomness is needed.
     label(ax, 1130, 95, "Gridlock")
@@ -248,9 +248,9 @@ def validate_text(fig):
                 raise RuntimeError(f"Label extends outside panel: {text.get_text()}")
     ax = fig.axes[3]
     column_bounds = {
-        "Neighbours' colours": (0, 543),
-        "Move to the conflict-free colour": (0, 543),
-        "Choose among\nconflict-free colours": (543, 1020),
+        "Neighbors' colors": (0, 543),
+        "Move to the conflict-free color": (0, 543),
+        "Choose among\nconflict-free colors": (543, 1020),
     }
     for text in ax.texts:
         if text.get_text() in column_bounds:

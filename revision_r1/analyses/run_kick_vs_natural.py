@@ -1,4 +1,4 @@
-"""Large responses to an injected inconsistency compared with large natural unsolved episodes (Supplementary
+"""Large responses to an injected conflict compared with large natural unsolved episodes (Supplementary
 Fig. S7): share of responses and episodes of at least 100 colour changes, and the median size and duration of
 those, from the healed kicks of run_kick.py.  KS_logsize is the two-sample KS distance of log10 size.
 

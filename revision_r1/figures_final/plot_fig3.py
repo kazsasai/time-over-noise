@@ -19,7 +19,7 @@ def main():
             rr = rows(fpt['long'],model)
             errors(ax,[r['p'] for r in rr],[r[f'succ_r{h}'] for r in rr],
                    c,label=f'{h:,} rounds',marker=m,ls=ls,markersize=3)
-        fraction(ax); parameter(ax, r'Behavioural noise $\varepsilon$' if model=='SNM' else r'Freezing probability $p$')
+        fraction(ax); parameter(ax, r'Behavioral noise $\varepsilon$' if model=='SNM' else r'Freezing probability $p$')
         ax.set_ylabel('Fraction reaching a solution')
         ax.legend(loc='center right' if model=='SNM' else 'lower center')
 

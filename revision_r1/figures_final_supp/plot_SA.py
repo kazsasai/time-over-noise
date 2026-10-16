@@ -22,7 +22,7 @@ def main():
         if i%5 == 0:
             ax.set_ylabel(r'Fraction of all avalanches $\geq s$')
         if i >= 5:
-            ax.set_xlabel('Size $s$ (colour changes)')
+            ax.set_xlabel('Size $s$ (color changes)')
     bottom = gs[2, :].subgridspec(1, 2)
     ax = fig.add_subplot(bottom[0])
     panel(ax, 'k')
@@ -47,7 +47,7 @@ def main():
                         ('sweep|all', 50000, SNM)]:
         y = [quantile_hist(*pooled('SNM', p, key)) for p in P]
         ax.plot(P, y, 'o-', color=col, label=f'{T:,} rounds')
-    ax.set_yscale('log'); ax.set_ylabel('Median size (colour changes)')
+    ax.set_yscale('log'); ax.set_ylabel('Median size (color changes)')
     parameter(ax, 'SNM'); ax.legend(loc='lower right')
     handles = [Line2D([], [], color=INK, label='All')]
     handles += [Line2D([], [], color=CLASS[c], label=c.capitalize()) for c in CLASS]

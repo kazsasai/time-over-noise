@@ -36,7 +36,7 @@ def main():
     for p,col in zip(pp,colors):
         s,n=subtract_hist(pooled('ARM',p),pooled('ARM',p,'sweep_stat|all'))
         ccdf(ax,s,n,color=col,label=f'$p$ = {p:.2f}')
-    ax.set(xscale='log',yscale='log',xlabel='Size $s$ (colour changes)',ylabel=r'Conditional fraction $\geq s$',ylim=(1e-3,1.1))
+    ax.set(xscale='log',yscale='log',xlabel='Size $s$ (color changes)',ylabel=r'Conditional fraction $\geq s$',ylim=(1e-3,1.1))
     ax.legend(fontsize=6.5)
     ax=axs[1,1];panel(ax,'d')
     ax.plot(pp,[data[f'{p:.2f}']['pre_aval_per_trial'] for p in pp],'o-',color=ARM)
@@ -49,7 +49,7 @@ def main():
     cb=fig.colorbar(im,ax=axs[2:,:].ravel().tolist(),fraction=.024,pad=.025)
     cb.solids.set_rasterized(False)
     cb.solids.set_edgecolor('face')
-    cb.set_label(r'$\Delta$AIC (colour floor = 1)');cb.set_ticks([1,100,10000])
+    cb.set_label(r'$\Delta$AIC (color floor = 1)');cb.set_ticks([1,100,10000])
     z.close();finish(fig,'G')
 
 if __name__=='__main__':

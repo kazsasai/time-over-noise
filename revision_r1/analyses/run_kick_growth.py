@@ -1,5 +1,5 @@
 """
-Finite-time growth rate of an injected inconsistency (a transverse-Lyapunov-like exponent, cf. Abe 2020;
+Finite-time growth rate of an injected conflict (a transverse-Lyapunov-like exponent, cf. Abe 2020;
 Platt, Spiegel & Tresser 1993), from the injection experiment of run_kick.py.
 After each kick: c0 = conflicting nodes right after the kick; c(tau) = conflicting nodes tau sweeps later
 (0 once healed; healed responses are kept, as in damage-spreading averages).

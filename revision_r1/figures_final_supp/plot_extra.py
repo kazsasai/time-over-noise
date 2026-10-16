@@ -17,7 +17,7 @@ def hybrid():
     fig, axs = plt.subplots(1, 2, figsize=(7.2, 2.9), layout='constrained')
     for ax, key, col, letter, title, xl in [
             (axs[0], 'SNM_eps0.05_vary_p', SNM, 'a', r'SNM rule, $\varepsilon = 0.05$, with freezing $p$', 'Freezing probability $p$'),
-            (axs[1], 'ARM_p0.45_vary_eps', ARM, 'b', r'ARM rule, $p = 0.45$, with noise $\varepsilon$', r'Behavioural noise $\varepsilon$')]:
+            (axs[1], 'ARM_p0.45_vary_eps', ARM, 'b', r'ARM rule, $p = 0.45$, with noise $\varepsilon$', r'Behavioral noise $\varepsilon$')]:
         panel(ax, letter)
         rr = h[key]
         band(ax, [r['value'] for r in rr], [r['solved'] for r in rr], col, marker='o')
@@ -105,7 +105,7 @@ def fpt_size():
     axs[0, 2].legend(fontsize=5.8, loc='lower right')
     heat = LinearSegmentedColormap.from_list('t', ['#F3F6F8', '#9FB3C1', '#4D6577', '#1C2A33'])
     heat.set_bad('#E9B8B1')
-    for ax, model, letter, xl in [(axs[1, 1], 'SNM', 'e', r'Behavioural noise $\varepsilon$'), (axs[1, 2], 'ARM', 'f', 'Freezing probability $p$')]:
+    for ax, model, letter, xl in [(axs[1, 1], 'SNM', 'e', r'Behavioral noise $\varepsilon$'), (axs[1, 2], 'ARM', 'f', 'Freezing probability $p$')]:
         panel(ax, letter)
         rr = [c for c in cells if c['model'] == model and c['k'] == 4]
         ps = sorted({c['par'] for c in rr})
@@ -132,7 +132,7 @@ def networks():
         for m, col, mk in [('SNM', SNM, 's'), ('ARM', ARM, 'o')]:
             rr = d[f'{g}_{m}']
             band(ax, [r['value'] for r in rr], [r['solved'] for r in rr], col, m, marker=mk)
-        ax.axhline(cz[g]['share_3colourable'], color=GREY, ls='--', lw=.8, label='3-colourable graphs')
+        ax.axhline(cz[g]['share_3colourable'], color=GREY, ls='--', lw=.8, label='3-colorable graphs')
         fraction(ax); mixed_parameter(ax); ax.set_xlim(0, 1)
         if g == 'ba':
             ax.set_ylabel('Solved within 1,000 rounds')

@@ -183,15 +183,15 @@ for col_idx, (title, tcol) in enumerate(zip(col_titles, col_colors)):
 # ── Row y-labels ──────────────────────────────────────────────────────────────
 axes[0, 0].set_ylabel('Fraction of conflicting nodes', fontsize=11)
 axes[1, 0].set_ylabel('Fraction of conflicting nodes', fontsize=11)
-axes[2, 0].set_ylabel('Fraction of agents changing colour', fontsize=11)
+axes[2, 0].set_ylabel('Fraction of agents changing color', fontsize=11)
 
 # ── Legend ────────────────────────────────────────────────────────────────────
 legend_elements = [
     Line2D([0], [0], color=COL_SNM,    lw=2.5, label='Conflicting nodes, SNM'),
     Line2D([0], [0], color=COL_ARM,    lw=2.5, label='Conflicting nodes, ARM'),
-    mpatches.Patch(facecolor=col_solved, alpha=0.65, label='Proper colouring'),
-    Line2D([0], [0], color='grey', lw=2.0, ls='--', alpha=0.5, label='Colour changes, $\\varepsilon = 0$ / $p = 0$'),
-    Line2D([0], [0], color='grey', lw=2.2, ls='-',             label='Colour changes, $\\varepsilon = 0.05$ / $p = 0.45$'),
+    mpatches.Patch(facecolor=col_solved, alpha=0.65, label='Proper coloring'),
+    Line2D([0], [0], color='grey', lw=2.0, ls='--', alpha=0.5, label='Color changes, $\\varepsilon = 0$ / $p = 0$'),
+    Line2D([0], [0], color='grey', lw=2.2, ls='-',             label='Color changes, $\\varepsilon = 0.05$ / $p = 0.45$'),
 ]
 fig.legend(handles=legend_elements,
            loc='lower center', ncol=4,

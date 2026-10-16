@@ -1,4 +1,4 @@
-"""Figure 5: natural excursions and responses to an injected inconsistency."""
+"""Figure 5: natural excursions and responses to an injected conflict."""
 from figure_common import *
 
 def main():
@@ -20,7 +20,7 @@ def main():
             ax.step(u,y,where='post',color=col,lw=1.3,label=f'p = {p:.2f}')
             ax.axvline(at(summary,'ARM',p)['s_star'],color=col,ls='--',lw=.8)
         ax.set_xscale('log'); ax.set_yscale('log'); ax.set_xlim(1.5,30000); ax.set_ylim(1e-6,1.5)
-        log_ticks(ax,[10,100,1000,10000]); ax.set_xlabel('Avalanche size $s$ (colour changes)')
+        log_ticks(ax,[10,100,1000,10000]); ax.set_xlabel('Avalanche size $s$ (color changes)')
         ax.set_ylabel(r'Fraction of population $\geq s$')
     axes[0,0].legend(loc='lower left',fontsize=6.5)
 
@@ -42,7 +42,7 @@ def main():
         assert np.isclose(np.average(arr[1,ix]-r['s_star'],weights=arr[2,ix]),tri[0])
     errors(ax,ps,triples,ARM,marker='o',ls='-')
     ax.set_yscale('log'); ax.set_ylim(80,3000); ax.set_yticks([100,300,1000,3000]); ax.yaxis.set_major_formatter(ScalarFormatter())
-    parameter(ax,r'Freezing probability $p$'); ax.set_ylabel('Mean excess (colour changes)')
+    parameter(ax,r'Freezing probability $p$'); ax.set_ylabel('Mean excess (color changes)')
     note(ax,'Resolve + open classes;\nno functional fit',xy=(.04,.06))
 
     ax=axes[2,0]; panel(ax,'e')
@@ -58,7 +58,7 @@ def main():
                   label=f'{model} '+(r'$\varepsilon$' if model=='SNM' else 'p')+f' = {p:.2f}')
     ax.set_xscale('log'); ax.set_xlim(.7,150000); ax.set_ylim(0,1.35)
     log_ticks(ax,[1,10,100,1000,10000,100000]); ax.tick_params(axis='x',labelsize=6.2)
-    ax.set_xlabel('Response size (colour changes)'); ax.set_ylabel('Probability density per decade')
+    ax.set_xlabel('Response size (color changes)'); ax.set_ylabel('Probability density per decade')
     ax.legend(loc='upper right',fontsize=6.5,handlelength=1.4)
     note(ax,'Completed responses only',xy=(.04,.93),va='top')
 
@@ -74,7 +74,7 @@ def main():
     ax.set_ylim(-.53,.83); ax.legend(loc='upper right',fontsize=6.6,handlelength=1.3)
     note(ax,'Short-time crossover\nnear p = 0.45-0.53',xy=(.04,.07))
 
-    finish(fig,5,'a-d: sweep-clock avalanches; a, b: each population normalised within itself; dashed, s*. c, d, f: 95% trial-bootstrap intervals.\n'
+    finish(fig,5,'a-d: sweep-clock avalanches; a, b: each population normalized within itself; dashed, s*. c, d, f: 95% trial-bootstrap intervals.\n'
            'e: completed responses. f: ARM; healed responses count as zero. The cascade probability is Supplementary Fig. S7j.')
 
 if __name__=='__main__':

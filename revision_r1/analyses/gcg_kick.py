@@ -3,7 +3,7 @@ Bernoulli-schedule solver (SNM / ARM) with two additions that use NO random numb
 reproduces gcg_variants / gcg_solver bit for bit:
   - colour history: int8 array (steps x N), for per-agent spectra (Uragami & Gunji 2018 protocol);
   - kicks: after the update of step t, if the colouring has been solved for at least `kick_wait` consecutive steps
-    and t >= next_kick, one inconsistency is injected: node u of the next pre-drawn edge (u, v) takes v's colour.
+    and t >= next_kick, one conflict is injected: node u of the next pre-drawn edge (u, v) takes v's colour.
     The next kick is allowed `kick_gap` steps later.  Kick edges are drawn beforehand from a separate generator.
 Validated by check_kick_bitidentity() against the stored core data.
 """

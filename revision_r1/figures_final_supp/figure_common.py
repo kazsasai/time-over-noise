@@ -62,7 +62,7 @@ def panel(ax, letter, title=None):
 def parameter(ax, model='ARM'):
     ax.set_xlim(0, 1)
     ax.set_xticks([0, .25, .5, .75, 1])
-    ax.set_xlabel('Freezing probability $p$' if model == 'ARM' else r'Behavioural noise $\varepsilon$')
+    ax.set_xlabel('Freezing probability $p$' if model == 'ARM' else r'Behavioral noise $\varepsilon$')
 
 def mixed_parameter(ax):
     # Axis shared by p (ARM) and epsilon (SNM); same ticks as parameter().

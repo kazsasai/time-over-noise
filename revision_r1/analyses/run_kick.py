@@ -1,5 +1,5 @@
 """
-Injection experiment (Fig. 5e, f; Supplementary Fig. S7): inject one inconsistency into a colouring that has stayed solved for at
+Injection experiment (Fig. 5e, f; Supplementary Fig. S7): inject one conflict into a colouring that has stayed solved for at
 least 50 sweeps (ARM) and measure the response until the colouring is consistent again.
   heal time  : sweeps from the kick to the first step with no conflict (censored at the next kick / record end)
   size       : colour changes from the step after the kick up to and including the healing step

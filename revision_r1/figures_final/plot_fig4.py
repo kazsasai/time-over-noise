@@ -27,7 +27,7 @@ def main():
         rr=rows(robust,model); x=[r['p'] for r in rr]
         ax.plot(x,[r['rand_per_sweep_search'] for r in rr],color=c,alpha=.5,lw=2.4,label='Before first solution')
         ax.plot(x,[r['rand_per_sweep_stationary'] for r in rr],color=c,ls='--',label='After first solution')
-        parameter(ax,r'Behavioural noise $\varepsilon$' if model=='SNM' else r'Freezing probability $p$')
+        parameter(ax,r'Behavioral noise $\varepsilon$' if model=='SNM' else r'Freezing probability $p$')
         ax.set_ylabel('Random reselections / sweep'); ax.set_ylim(-.15,21 if model=='SNM' else 4.6)
         ax.legend(loc='upper left' if model=='SNM' else 'center right',fontsize=6.3,handlelength=1.5)
         if model=='SNM': note(ax,'Before = after\n'+r'$20\varepsilon$ throughout',xy=(.06,.49))

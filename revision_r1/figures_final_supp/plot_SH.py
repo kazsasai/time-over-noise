@@ -17,7 +17,7 @@ def main():
     for tau,col,sty in [(1,SHADES[0],'s-'),(5,ARM,'o-'),(20,SHADES[2],'^-'),(50,GREY,'d--')]:
         y=[growth[f'ARM_{p:.2f}']['survival'][growth[f'ARM_{p:.2f}']['taus'].index(tau)] for p in P]
         ax.plot(P,y,sty,color=col,label=rf'$\tau$ = {tau} sweep'+('s' if tau>1 else ''))
-    fraction(ax);parameter(ax);ax.set_ylabel(r'Fraction inconsistent at $\tau$');ax.legend(fontsize=6.5)
+    fraction(ax);parameter(ax);ax.set_ylabel(r'Fraction with conflicts at $\tau$');ax.legend(fontsize=6.5)
     ax=axs[0,2];panel(ax,'c')
     qq=[];completion=[]
     for p in P:
@@ -30,14 +30,14 @@ def main():
         ax=axs[1,j];panel(ax,chr(100+j))
         for origin,col,sty in [('kick',ARM,'o-'),('natural',GREY,'s--')]:
             ax.plot(P,[large[f'{p:.2f}'][f'{origin}_large_median_{kind}'] for p in P],sty,color=col,label='Injected' if origin=='kick' else 'Natural')
-        parameter(ax);ax.set_yscale('log');ax.set_ylabel('Median size (colour changes)' if kind=='size' else 'Median duration (sweeps)');ax.legend()
+        parameter(ax);ax.set_yscale('log');ax.set_ylabel('Median size (color changes)' if kind=='size' else 'Median duration (sweeps)');ax.legend()
     ax=axs[1,2];panel(ax,'f')
     for model,p,col in conditions[:3]:
         with np.load(DATA/f'kick/kick_raw_ARM_{p:.2f}.npz') as z:
             a=z['kicks'];k=a[(a[:,0]>0)&(a[:,2]>=100),2];n=z['natural_size'];n=n[n>=100]
         for vals,sty,label in [(k,'-',f'$p$ = {p:.2f}, injected'),(n,'--',f'$p$ = {p:.2f}, natural')]:
             s,c=np.unique(vals,return_counts=True);ccdf(ax,s,c,color=col,ls=sty,label=label)
-    ax.set(xscale='log',yscale='log',xlabel='Size $s$ (colour changes)',ylabel=r'Conditional fraction $\geq s$',ylim=(1e-3,1.1))
+    ax.set(xscale='log',yscale='log',xlabel='Size $s$ (color changes)',ylabel=r'Conditional fraction $\geq s$',ylim=(1e-3,1.1))
     ax.legend(fontsize=6,ncol=1)
     ax=axs[2,0];panel(ax,'g')
     for model,col in [('ARM',ARM),('SNM',SNM)]:

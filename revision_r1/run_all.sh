@@ -45,7 +45,7 @@ analyses() {
   python3 export_supp_data.py
   python3 run_branching.py
   python3 run_branching_by_class.py
-  # Injected inconsistencies, leaving the consistent state, graph types
+  # Injected conflicts, leaving the consistent state, graph types
   python3 run_kick.py
   python3 run_kick_growth.py
   python3 run_kick_vs_natural.py

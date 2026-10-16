@@ -15,7 +15,7 @@ outputs it reads and the analysis scripts that produce them. In that table, scri
 | `result_for_scalability.pkl` (Fig. 6e, f) | `run_scalability.py` | `fig6_numbers.py` |
 
 Some analyses run new simulations with the graphs and seeds of the core data: the control experiments
-(`run_factorial_2x2.py`, `pilot_E1_E4.py`, with `gcg_variants.py`), the injected inconsistencies and colour histories
+(`run_factorial_2x2.py`, `pilot_E1_E4.py`, with `gcg_variants.py`), the injected conflicts and color histories
 (`run_kick.py`, `run_kick_growth.py`, `run_graph_types.py`, `run_departure_mechanism.py`, `run_agent_spectra.py`, with
 `gcg_kick.py`), the mixed models and network ensembles (`run_supp_extra.py`) and the step-budget extension
 (`run_budget_extension.py`). `gcg_variants.py` and `gcg_kick.py` reproduce `gcg_solver.py` bit for bit where their

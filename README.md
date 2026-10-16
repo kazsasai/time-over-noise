@@ -7,14 +7,14 @@ Code for the paper
 
 Individuals in human groups and animal collectives perceive only their surroundings and act on their own time.
 The paper asks whether the variability that coordination needs can come from the individuality of time itself,
-through the inconsistencies it produces, rather than from behavioural noise tuned from outside. It uses the
-distributed graph-colouring problem and two decentralised update models:
+through the inconsistencies it produces, rather than from behavioral noise tuned from outside. It uses the
+distributed graph-coloring problem and two decentralized update models:
 
 - **SNM** (synchronous noise model). All agents act at every round on a common clock. With probability 1 − ε an
-  agent picks a conflict-free colour (and keeps its colour when gridlocked); with probability ε it picks any colour
+  agent picks a conflict-free color (and keeps its color when gridlocked); with probability ε it picks any color
   at random.
 - **ARM** (asynchronous random model). Each agent acts in a round with probability 1 − p, on its own time. An
-  acting agent picks a conflict-free colour, and redraws its colour at random only when it is gridlocked.
+  acting agent picks a conflict-free color, and redraws its color at random only when it is gridlocked.
 
 ---
 
@@ -99,12 +99,17 @@ The simulation datasets and the analysis results are archived on Zenodo:
 
 ## Versions
 
-- **v2.1**: code of the paper in its present form (Zenodo [10.5281/zenodo.23392863](https://doi.org/10.5281/zenodo.23392863)).
+- **v2.2**: code of the paper in its present form (Zenodo [10.5281/zenodo.23420093](https://doi.org/10.5281/zenodo.23420093)).
+  American spelling in the figure labels, the table text and the documentation, as in the revised manuscript.
+  The injection experiment is described as an injected conflict, as in the revised manuscript (note of
+  Supplementary Table S11, axis of Supplementary Fig. S7b, docstrings).
+  Analyses, data and results are unchanged, and the analysis-result and data files on Zenodo are those of v2.1.
+- **v2.1**: Zenodo [10.5281/zenodo.23392863](https://doi.org/10.5281/zenodo.23392863).
   Corrections after a final check: the name of a copyright holder in `LICENSE` (Yuto Soga); times to the first
   solution in Supplementary Fig. S11 counted from 1, as in Fig. 3; table notes and figure labels aligned with the text;
   the Mann-Whitney test of Fig. 3 over all trials of the 50,000-round records. Added: the paired comparison of the
-  times to the first solution (trials with the same seed share the graph and the initial colouring;
-  `run_first_passage.py`, `run_mannwhitney.py`); cascade probabilities of injected inconsistencies with 95% intervals
+  times to the first solution (trials with the same seed share the graph and the initial coloring;
+  `run_first_passage.py`, `run_mannwhitney.py`); cascade probabilities of injected conflicts with 95% intervals
   from bootstrap over graphs (Supplementary Fig. S7j and Table S11; `run_graph_types.py`); the avalanche classes of
   Fig. 5a, b named by the state at the bin ends.
 - **v2.0**: the analyses, figures and tables in `revision_r1/`; core data regenerated with the seeded solver.

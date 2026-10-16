@@ -22,7 +22,7 @@ def plateau(ax, cell, model, k):
         ax.plot(x, w[:, 0], color=col, lw=1.1, label=f'{n}')
     ax.axhline(.9, color=GREY, lw=.7, ls='--')
     fraction(ax)
-    parameter(ax, r'Behavioural noise $\varepsilon$' if model == 'SNM' else r'Freezing probability $p$')
+    parameter(ax, r'Behavioral noise $\varepsilon$' if model == 'SNM' else r'Freezing probability $p$')
     ax.set_ylabel('Solved within 10,000 rounds')
     return colours
 
@@ -55,7 +55,7 @@ def heatmap(ax, cell, model, colour):
     ticks = [i for i, k in enumerate(ks) if k in (2, 10, 20, 30, 40, 50)]
     ax.set_xticks(ticks, [ks[i] for i in ticks])
     ax.set_yticks(range(len(ns)), ns)
-    ax.set_xlabel('Number of colours $k$')
+    ax.set_xlabel('Number of colors $k$')
     ax.set_ylabel('Network size $N$')
     ax.grid(False)
     for s in ax.spines.values():
